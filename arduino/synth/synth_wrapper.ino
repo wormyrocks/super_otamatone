@@ -1,19 +1,23 @@
-#define FILTER_SIZE 10
-#define POT_SAMPLE_RATE 10
+#define FILTER_SIZE 16
+#define POT_SAMPLE_RATE 4
 #define POT_PIN A10
 
 //Change these values based on minimum and maximum resistance of control potentiometer
-#define POT_MIN 6600
-#define POT_MAX 65536
+#define POT_MIN 6600.0
+#define POT_MAX 65536.0
 
-#define FREQ_MIN 20
-#define FREQ_MAX 12500
+//ADC reading below which potentiometer circuit is probably open
+#define POT_ON_THRESHOLD 200
+
+//minimum and maximum osc frequencies
+#define FREQ_MIN 200.0
+#define FREQ_MAX 5000.0
 
 //potentiometer values details (w/ 1k pulldown):
 //with test setup: minimum reading = 6600; maximum reading: 65536 (range: 58936)
 
 //constant multiplier maps potentiometer position to frequency range
-const int pot_freq_ratio = (POT_MAX-POT_MIN) / (FREQ_MAX-FREQ_MIN);
+const float pot_freq_ratio = (FREQ_MAX-FREQ_MIN) / (POT_MAX-POT_MIN);
 
 //constant offset for lowest possible potentiometer value
 const int pot_offset = POT_MIN * pot_freq_ratio - FREQ_MIN;
@@ -27,6 +31,9 @@ static int avg_ind = 0;
 //time between cycles
 static int dt;
 
+//most recent value from potentiometer
+static int pot_val;
+
 AudioControlSGTL5000 codec;
 
 void setup(){
@@ -38,45 +45,52 @@ void setup(){
   AudioMemoryUsageMaxReset();
   codec.enable();
   codec.volume(0.45);
-  envelope1.attack(9.2);
-  envelope1.hold(2.1);
-  envelope1.decay(31.4);
-  envelope1.sustain(0.6);
-  envelope1.release(84.5);
+  envelope1.attack(0);
+  envelope1.hold(0);
+  envelope1.decay(0);
+  envelope1.sustain(1);
+  envelope1.release(1);
 }
 
 float pot_to_freq(){
   int in = 0;
-  for (int n = 0; n < FILTER_SIZE-1; n++){
-    in += avgs[n];
+  int good = FILTER_SIZE;
+  for (int n = 0; n < FILTER_SIZE; n++){
+    if (avgs[n] < POT_ON_THRESHOLD) {
+      good-=1;
+    }else in += avgs[n];
   }
-  in /= FILTER_SIZE;
+  in /= good;
+
   float freq = in * pot_freq_ratio - pot_offset;
   return freq;
 }
 
 void loop(){
   dt = millis();
-  if (playing==1){
-    if (analogRead(A10) < 200){
-      //button released
+  //if button is currently pressed
+  if (playing == 1){
+    if (pot_val < POT_ON_THRESHOLD){
+      //if button is released
       envelope1.noteOff();
       playing = 0;
-    }else{  
+    }else{
+      //if button is held down, update frequency with moving average
       waveform1.frequency(pot_to_freq());
     }
   }else{
     //button pressed
-    if (analogRead(A10) > 200){
+    if (pot_val > POT_ON_THRESHOLD){
         AudioNoInterrupts();
-        waveform1.begin(0.2, pot_to_freq(), WAVEFORM_SINE);
+        waveform1.begin(0.2, pot_to_freq(), WAVEFORM_PULSE);
+        waveform1.pulseWidth(0.3);
         envelope1.noteOn();
         AudioInterrupts();
         playing = 1;
     }
   }
-  avgs[avg_ind] = analogRead(POT_PIN);
+  pot_val = analogRead(POT_PIN);
+  avgs[avg_ind] = pot_val;
   avg_ind = (avg_ind + 1) % FILTER_SIZE;
   while (millis() - dt < POT_SAMPLE_RATE) {}
 }
-
