@@ -1,30 +1,20 @@
-#define FILTER_SIZE 16
+#define FILTER_SIZE 4
 #define POT_SAMPLE_RATE 4
 #define POT_PIN A10
 
-//Change these values based on minimum and maximum resistance of control potentiometer
-#define POT_MIN 6600.0
-#define POT_MAX 65536.0
-
-//ADC reading below which potentiometer circuit is probably open
-#define POT_ON_THRESHOLD 200
+#define RMIN 23     // minimum neck resistance, in kOhms
+#define RMAX 190    // maximum neck resistance, in kOhms
+#define PULL 62     // size of pull resistor, in kOhms
 
 //minimum and maximum osc frequencies
-#define FREQ_MIN 200.0
-#define FREQ_MAX 5000.0
+#define FREQ_MIN 150.0
+#define FREQ_MAX 1400.0
 
-//potentiometer values details (w/ 1k pulldown):
-//with test setup: minimum reading = 6600; maximum reading: 65536 (range: 58936)
-
-//constant multiplier maps potentiometer position to frequency range
-const float pot_freq_ratio = (FREQ_MAX-FREQ_MIN) / (POT_MAX-POT_MIN);
-
-//constant offset for lowest possible potentiometer value
-const int pot_offset = POT_MIN * pot_freq_ratio - FREQ_MIN;
 static int playing = 0;
 
 //ring buffer containing samples in moving average
 static int avgs[FILTER_SIZE];
+
 //pointer offset of oldest buffer contents
 static int avg_ind = 0;
 
@@ -34,9 +24,13 @@ static int dt;
 //most recent value from potentiometer
 static int pot_val;
 
+//coefficient for neck scaling
+static int neckscale = 65536 * PULL;
+static int neckscale_2 = 65536 / (RMAX-RMIN);
+
 AudioControlSGTL5000 codec;
 
-void setup(){
+void setup() {
   pinMode(POT_PIN, INPUT);
   Serial.begin(115200);
   analogReadResolution(16);
@@ -52,44 +46,51 @@ void setup(){
   envelope1.release(1);
 }
 
-float pot_to_freq(){
+int pot_to_freq() {
   int in = 0;
   int good = FILTER_SIZE;
-  for (int n = 0; n < FILTER_SIZE; n++){
-    if (avgs[n] < POT_ON_THRESHOLD) {
-      good-=1;
-    }else in += avgs[n];
+  for (int n = 0; n < FILTER_SIZE; n++) {
+    if (avgs[n] == 0) {
+      good -= 1;
+    } else in += avgs[n];
   }
   in /= good;
-
-  float freq = in * pot_freq_ratio - pot_offset;
-  return freq;
+  Serial.println(in);
+  float freq = 1.0/(in/65536.0*.0057046+.00069499);
+  return int(freq);
 }
 
-void loop(){
+int read_scale_neck() {
+  // resistance of neck, accounting for voltage division: PULL * (65536-N)/N
+  int a = analogRead(A10);
+  if (a < 6000) return 0;
+  return (neckscale/a-PULL-RMIN)*neckscale_2;
+}
+
+void loop() {
   dt = millis();
   //if button is currently pressed
-  if (playing == 1){
-    if (pot_val < POT_ON_THRESHOLD){
+  if (playing == 1) {
+    if (pot_val == 0) {
       //if button is released
       envelope1.noteOff();
       playing = 0;
-    }else{
+    } else {
       //if button is held down, update frequency with moving average
       waveform1.frequency(pot_to_freq());
     }
-  }else{
+  } else {
     //button pressed
-    if (pot_val > POT_ON_THRESHOLD){
-        AudioNoInterrupts();
-        waveform1.begin(0.2, pot_to_freq(), WAVEFORM_PULSE);
-        waveform1.pulseWidth(0.3);
-        envelope1.noteOn();
-        AudioInterrupts();
-        playing = 1;
+    if (pot_val != 0) {
+      AudioNoInterrupts(); 
+      waveform1.begin(0.2, pot_to_freq(), WAVEFORM_SAWTOOTH);
+      waveform1.pulseWidth(0.3);
+      envelope1.noteOn();
+      AudioInterrupts();
+      playing = 1;
     }
   }
-  pot_val = analogRead(POT_PIN);
+  pot_val = read_scale_neck();
   avgs[avg_ind] = pot_val;
   avg_ind = (avg_ind + 1) % FILTER_SIZE;
   while (millis() - dt < POT_SAMPLE_RATE) {}
