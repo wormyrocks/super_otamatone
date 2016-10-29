@@ -7,8 +7,8 @@
 #define PULL 62     // size of pull resistor, in kOhms
 
 //minimum and maximum osc frequencies
-#define FREQ_MIN 150.0
-#define FREQ_MAX 1400.0
+#define FREQ_MIN 160.0
+#define FREQ_MAX 1447.0
 
 static int playing = 0;
 
@@ -55,9 +55,9 @@ int pot_to_freq() {
     } else in += avgs[n];
   }
   in /= good;
-  Serial.println(in);
-  float freq = 1.0/(in/65536.0*.0057046+.00069499);
-  return int(freq);
+  int freq = (1.0-in/65536.0) * (FREQ_MAX - FREQ_MIN) + FREQ_MIN;
+//  Serial.printf("%d %d\n",in,freq);
+  return freq;
 }
 
 int read_scale_neck() {
