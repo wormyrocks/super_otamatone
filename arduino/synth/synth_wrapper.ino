@@ -29,6 +29,10 @@ static int pot_val;
 static int neckscale = 65536 * PULL;
 static int neckscale_2 = 65536 / (RMAX-RMIN);
 
+//coefficient for inverse freq scaling
+static float a_coeff = 1.0/FREQ_MIN - 1.0/FREQ_MAX;
+static float b_coeff = 1.0/FREQ_MAX;
+
 AudioControlSGTL5000 codec;
 IntervalTimer pot_read_int;
 
@@ -60,19 +64,21 @@ int pot_to_freq() {
   }
   interrupts();
   in /= good;
-  int freq = (1.0-in/65536.0) * (FREQ_MAX - FREQ_MIN) + FREQ_MIN;
+  int freq = 1.0/(a_coeff * in / 65536.0 + b_coeff);
+  
 //  Serial.printf("%d %d\n",in,freq);
   return freq;
 }
 
 void read_scale_neck() {
   // resistance of neck, accounting for voltage division: PULL * (65536-N)/N
-  int a = analogRead(A10);
-  if (a < 6000) a = 0;
-  else a = (neckscale/a-PULL-RMIN)*neckscale_2;
-  pot_val = a;
+  pot_val = analogRead(A10);
+  if (pot_val < 6000) pot_val = 0;
+  else {
+    pot_val = (neckscale/pot_val-PULL-RMIN)*neckscale_2;
+  } 
   avgs[avg_ind] = pot_val;
-  avg_ind = (avg_ind + 1) % FILTER_SIZE;
+  avg_ind = (avg_ind + 1) % FILTER_SIZE; 
 }
 
 void loop() {
