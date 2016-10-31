@@ -1,3 +1,5 @@
+#include "wavetable.h"
+
 #define POT_PIN A10
 
 #define RMIN 23     // minimum neck resistance, in kOhms
@@ -51,6 +53,7 @@ void setup() {
   envelope1.decay(0);
   envelope1.sustain(1);
   envelope1.release(1);
+  waveform1.arbitraryWaveform(OTA_WAVETABLE, FREQ_MAX);
 }
 
 int pot_to_freq() {
@@ -100,8 +103,7 @@ void loop() {
     //button pressed
     if (pv != 0) {
       AudioNoInterrupts(); 
-      waveform1.begin(0.2, pot_to_freq(), WAVEFORM_SAWTOOTH);
-      waveform1.pulseWidth(0.3);
+      waveform1.begin(0.2, pot_to_freq(), WAVEFORM_ARBITRARY);
       envelope1.noteOn();
       AudioInterrupts();
       playing = 1;
