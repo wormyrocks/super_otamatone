@@ -1,11 +1,16 @@
-#include "wavetable.h"
+
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define OLED_RESET 4
 
 #define POT_PIN A10
 
 #define RMIN 23     // minimum neck resistance, in kOhms
 #define RMAX 190    // maximum neck resistance, in kOhms
 #define PULL 62     // size of pull resistor, in kOhms
-#define POLL_NECK_MICROS 6000 // interval between resistor polls (us)
+#define POLL_NECK_MICROS 4000 // interval between resistor polls (us)
 #define EVENT_LOOP_DT 10 // time between loop() calls (ms)
 #define FILTER_SIZE 16  // size of moving average buffer
 
@@ -35,6 +40,7 @@ static int neckscale_2 = 65536 / (RMAX-RMIN);
 static float a_coeff = 1.0/FREQ_MIN - 1.0/FREQ_MAX;
 static float b_coeff = 1.0/FREQ_MAX;
 
+Adafruit_SSD1306 display(OLED_RESET);
 AudioControlSGTL5000 codec;
 IntervalTimer pot_read_int;
 
@@ -47,13 +53,21 @@ void setup() {
   AudioProcessorUsageMaxReset();
   AudioMemoryUsageMaxReset();
   codec.enable();
-  codec.volume(0.45);
+  codec.volume(0.5);
   envelope1.attack(0);
   envelope1.hold(0);
   envelope1.decay(0);
   envelope1.sustain(1);
   envelope1.release(1);
-  waveform1.arbitraryWaveform(OTA_WAVETABLE, FREQ_MAX);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
+  // Clear the buffer.
+  display.clearDisplay();
+  display.setTextSize(.5);
+  display.setTextColor(WHITE);
+  display.setCursor(0,0);
+  display.setTextSize(3);
+  display.println("otto");
+  display.display();
 }
 
 int pot_to_freq() {
@@ -103,7 +117,8 @@ void loop() {
     //button pressed
     if (pv != 0) {
       AudioNoInterrupts(); 
-      waveform1.begin(0.2, pot_to_freq(), WAVEFORM_ARBITRARY);
+      waveform1.begin(0.4, pot_to_freq(), WAVEFORM_SAWTOOTH);
+      waveform1.pulseWidth(0.3);
       envelope1.noteOn();
       AudioInterrupts();
       playing = 1;
