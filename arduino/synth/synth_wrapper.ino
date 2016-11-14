@@ -168,6 +168,8 @@ void setup() {
   if (!edit_mode){
     disp_setup();
     disp_update_non_menu();
+  }else{
+    ms.display();
   }
   
   waveform1.begin(1, pot_to_freq(), WAVEFORM_SQUARE);
