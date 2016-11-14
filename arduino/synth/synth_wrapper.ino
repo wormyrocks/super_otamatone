@@ -178,14 +178,14 @@ void setup() {
 
 void button_1_pressed(){
   if (edit_mode){
-    
+    ms.back();
+    ms.display();
   }
 }
 
 void button_1_released(){
   if (edit_mode){
-    ms.back();
-    ms.display();
+    
   }else{
     if (!playing){
       change_octave(-1);
