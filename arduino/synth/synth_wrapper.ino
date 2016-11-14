@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Bounce2.h>
+#include <math.h>
 
 #define OLED_RESET 4
 
@@ -17,12 +18,15 @@
 
 //minimum and maximum osc frequencies
 #define FREQ_MIN_INIT 160.0
-#define FREQ_MAX_INIT 1447.0
+#define FREQ_MAX_INIT 1450.0
 
 static int playing = 0;
 
 //hold both cheeks during startup to go to patch edit mode
 static uint8_t edit_mode = 0;
+
+//are we quantizing values?
+static uint8_t oto_tune_on = 0;
 
 //ring buffer containing samples in moving average
 static int avgs[FILTER_SIZE];
@@ -39,6 +43,11 @@ static int pot_val;
 //minimum and maximum frequencies
 static float freq_min = FREQ_MIN_INIT;
 static float freq_max = FREQ_MAX_INIT;
+
+//constant for equal temperament
+static const float a_exp = pow(2, 1/12.0);
+static const float log_a_exp = log(2)/12.0;
+static const float a_tune = 440;
 
 //current octave
 static int octave = 0;
@@ -63,7 +72,7 @@ Bounce debounce_2 = Bounce();
 void setup() {
   pinMode(BUTTON_LEFT, INPUT);
   pinMode(BUTTON_RIGHT, INPUT);
-
+  
   //enter edit mode if both buttons are down at startup
   if (digitalRead(BUTTON_LEFT) == 1 && digitalRead(BUTTON_RIGHT) == 1){
     edit_mode = 1;
@@ -110,6 +119,14 @@ void change_octave(int oct){
     b_coeff = 1.0/freq_max;
   }else octave -= oct;
 }
+
+int oto_tune(int f_orig){
+  int freq;
+  freq = round(log(f_orig/a_tune)/log_a_exp);
+  freq = a_tune * exp(freq * log_a_exp);
+  return freq;
+}
+
 int pot_to_freq() {
   int in = 0;
   int good = FILTER_SIZE;
@@ -122,7 +139,7 @@ int pot_to_freq() {
   interrupts();
   in /= good;
   int freq = 1.0/(a_coeff * in / 65536.0 + b_coeff);
-  
+  if (oto_tune_on) return oto_tune(freq);
   return freq;
 }
 
