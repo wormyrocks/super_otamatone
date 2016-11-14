@@ -18,15 +18,19 @@
 #define FREQ_MIN_INIT 160.0
 #define FREQ_MAX_INIT 1450.0
 
-static int playing = 0;
+// ***** flags contains 8 boolean flags that help control overall state machine ***** //
 
-//hold both cheeks during startup to go to patch edit mode
-static uint8_t edit_mode = 0;
-static uint8_t scrolling = 0;
-static uint8_t select_on_release = 0;
+uint8_t flags = 0;
 
-//are we quantizing values?
-static uint8_t oto_tune_on = 0;
+#define PLAYING 0
+#define EDIT_MODE 1
+#define SCROLLING 2
+#define SELECT_ON_RELEASE 3
+#define OTO_TUNE_ON 4
+#define GET_FLAG(n) flags | (0b01111111 >> n)
+#define SET_FLAG(n) flags |= (0b10000000 >> n)
+#define CLEAR_FLAG(n) flags &= (0b01111111 >> n)
+#define TOGGLE_FLAG(n) flags ^= (0b10000000 >> n)
 
 //ring buffer containing samples in moving average
 static int avgs[FILTER_SIZE];
@@ -87,7 +91,7 @@ int pot_to_freq() {
   interrupts();
   in /= good;
   int freq = 1.0/(a_coeff * in / 65536.0 + b_coeff);
-  if (oto_tune_on) return oto_tune(freq);
+  if (GET_FLAG(OTO_TUNE_ON)) return oto_tune(freq);
   return freq;
 }
 
@@ -133,7 +137,7 @@ void setup() {
   pinMode(POT_PIN, INPUT);
   //enter edit mode if both buttons are down at startup
   if (digitalRead(BUTTON_LEFT) == 1 && digitalRead(BUTTON_RIGHT) == 1){
-    edit_mode = 1;
+    SET_FLAG(EDIT_MODE);
   }
   debounce_1.attach(BUTTON_LEFT);
   debounce_2.attach(BUTTON_RIGHT);
@@ -165,7 +169,7 @@ void setup() {
   ms.get_root_menu().add_item(&mm_mi2);
   ms.get_root_menu().add_menu(&mu1);
   mu1.add_item(&mu1_mi1);
-  if (!edit_mode){
+  if (!GET_FLAG(EDIT_MODE)){
     disp_setup();
     disp_update_non_menu();
   }else{
@@ -177,17 +181,17 @@ void setup() {
 }
 
 void button_1_pressed(){
-  if (edit_mode){
+  if (GET_FLAG(EDIT_MODE)){
     ms.back();
     ms.display();
   }
 }
 
 void button_1_released(){
-  if (edit_mode){
+  if (GET_FLAG(EDIT_MODE)){
     
   }else{
-    if (!playing){
+    if (!GET_FLAG(PLAYING)){
       change_octave(-1);
       disp_update_non_menu();
     }
@@ -195,21 +199,21 @@ void button_1_released(){
 }
 
 void button_2_pressed(){
-  if (edit_mode){
-    scrolling = 1;
-    select_on_release = 1;
+  if (GET_FLAG(EDIT_MODE)){
+    SET_FLAG(SCROLLING);
+    SET_FLAG(SELECT_ON_RELEASE);
   }
 }
 
 void button_2_released(){
-  if (edit_mode){
-    scrolling = 0;
-    if (select_on_release){
+  if (GET_FLAG(EDIT_MODE)){
+    CLEAR_FLAG(SCROLLING);
+    if (GET_FLAG(SELECT_ON_RELEASE)){
       ms.select();
       ms.display();
     }
   }else{
-    if (!playing){
+    if (!GET_FLAG(PLAYING)){
       change_octave(1);
       disp_update_non_menu();
     }
@@ -225,10 +229,10 @@ void loop() {
   int pv = pot_val;
   interrupts();
   
-  if (scrolling == 1){
-    if (playing){
+  if (GET_FLAG(SCROLLING)){
+    if (GET_FLAG(PLAYING)){
       envelope1.noteOff();
-      playing = 0;
+      CLEAR_FLAG(PLAYING);
     }
     if (pv != 0){
       Menu const* m = ms.get_current_menu();
@@ -240,16 +244,16 @@ void loop() {
         ms.prev();
         ms.display();
       }
-      select_on_release = 0;
+      CLEAR_FLAG(SELECT_ON_RELEASE);
     } 
   }
   //if neck is currently pressed
   else{
-    if (playing == 1) {
+    if (GET_FLAG(PLAYING)) {
       if (pv == 0) {
         //if neck is released
         envelope1.noteOff();
-        playing = 0;
+        CLEAR_FLAG(PLAYING);
       } else {
         //if neck is held down, update frequency with moving average
         waveform1.frequency(pot_to_freq());
@@ -261,21 +265,15 @@ void loop() {
         waveform1.frequency(pot_to_freq());
         envelope1.noteOn();
         AudioInterrupts();
-        playing = 1;
+        SET_FLAG(PLAYING);
       }
     }
   }
-  if (debounce_1.risingEdge()){
-    button_1_pressed();
-  }
-  else if (debounce_1.fallingEdge()){
-    button_1_released();
-  }
-  if (debounce_2.risingEdge()){
-    button_2_pressed();
-  }
-  else if (debounce_2.fallingEdge()){
-    button_2_released();
-  }
+
+  if (debounce_1.risingEdge()) button_1_pressed();
+  else if (debounce_1.fallingEdge()) button_1_released();
+  if (debounce_2.risingEdge()) button_2_pressed();
+  else if (debounce_2.fallingEdge()) button_2_released();
+
   while (millis() - dt < EVENT_LOOP_DT) {}
 }
