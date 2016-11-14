@@ -23,6 +23,7 @@ static int playing = 0;
 //hold both cheeks during startup to go to patch edit mode
 static uint8_t edit_mode = 0;
 static uint8_t scrolling = 0;
+static uint8_t select_on_release = 0;
 
 //are we quantizing values?
 static uint8_t oto_tune_on = 0;
@@ -106,17 +107,13 @@ void disp_setup(){
   display.setTextColor(WHITE);
 }
 
-void disp_update(){
-  if (edit_mode){
-    ms.display();
-  }else{
-    display.clearDisplay();
-    display.setCursor(0,0);
-    display.print("Octave: ");
-    if (octave >= 0) display.print("+");
-    display.println(octave);
-    display.display();
-  }
+void disp_update_non_menu(){
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.print("Octave: ");
+  if (octave >= 0) display.print("+");
+  display.println(octave);
+  display.display();
 }
 
 void change_octave(int oct){
@@ -168,8 +165,10 @@ void setup() {
   ms.get_root_menu().add_item(&mm_mi2);
   ms.get_root_menu().add_menu(&mu1);
   mu1.add_item(&mu1_mi1);
-  if (!edit_mode) disp_setup();
-  disp_update();
+  if (!edit_mode){
+    disp_setup();
+    disp_update_non_menu();
+  }
   
   waveform1.begin(1, pot_to_freq(), WAVEFORM_SQUARE);
   waveform1.pulseWidth(0.5);
@@ -184,10 +183,11 @@ void button_1_pressed(){
 void button_1_released(){
   if (edit_mode){
     ms.back();
+    ms.display();
   }else{
     if (!playing){
       change_octave(-1);
-      disp_update();
+      disp_update_non_menu();
     }
   }
 }
@@ -195,17 +195,21 @@ void button_1_released(){
 void button_2_pressed(){
   if (edit_mode){
     scrolling = 1;
+    select_on_release = 1;
   }
 }
 
 void button_2_released(){
   if (edit_mode){
     scrolling = 0;
-    ms.select();
+    if (select_on_release){
+      ms.select();
+      ms.display();
+    }
   }else{
     if (!playing){
       change_octave(1);
-      disp_update();
+      disp_update_non_menu();
     }
   }
 }
@@ -224,34 +228,39 @@ void loop() {
       envelope1.noteOff();
       playing = 0;
     }
-    Menu const* m = ms.get_current_menu();
-    int index = (65536-pv) * m->get_num_components() / 65536;
-    if (index > m->get_current_component_num()){
-      ms.next();
-      
-    }else if (index < m->get_current_component_num()){
-      ms.prev();
-    }
-    disp_update();
+    if (pv != 0){
+      Menu const* m = ms.get_current_menu();
+      int index = (65536-pv) * m->get_num_components() / 65536;
+      if (index > m->get_current_component_num()){
+        ms.next();
+        ms.display();
+      }else if (index < m->get_current_component_num()){
+        ms.prev();
+        ms.display();
+      }
+      select_on_release = 0;
+    } 
   }
-  //if button is currently pressed
-  else if (playing == 1) {
-    if (pv == 0) {
-      //if button is released
-      envelope1.noteOff();
-      playing = 0;
+  //if neck is currently pressed
+  else{
+    if (playing == 1) {
+      if (pv == 0) {
+        //if neck is released
+        envelope1.noteOff();
+        playing = 0;
+      } else {
+        //if neck is held down, update frequency with moving average
+        waveform1.frequency(pot_to_freq());
+      }
     } else {
-      //if button is held down, update frequency with moving average
-      waveform1.frequency(pot_to_freq());
-    }
-  } else {
-    //button pressed
-    if (pv != 0) {
-      AudioNoInterrupts(); 
-      waveform1.frequency(pot_to_freq());
-      envelope1.noteOn();
-      AudioInterrupts();
-      playing = 1;
+      //neck pressed
+      if (pv != 0) {
+        AudioNoInterrupts(); 
+        waveform1.frequency(pot_to_freq());
+        envelope1.noteOn();
+        AudioInterrupts();
+        playing = 1;
+      }
     }
   }
   if (debounce_1.risingEdge()){
