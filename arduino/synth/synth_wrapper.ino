@@ -4,6 +4,7 @@
 #define OLED_RESET 4
 
 #define POT_PIN A10
+#define VOLUME_PIN 15
 #define BUTTON_LEFT 0
 #define BUTTON_RIGHT 1
 
@@ -11,6 +12,7 @@
 #define RMAX 190    // maximum neck resistance, in kOhms
 #define PULL 62     // size of pull resistor, in kOhms
 #define POLL_NECK_MICROS 6000 // interval between resistor polls (us)
+#define POLL_VOLUME_MICROS 50000 // interval between volume pot polls (us)
 #define EVENT_LOOP_DT 10 // time between loop() calls (ms)
 #define FILTER_SIZE 8  // size of moving average buffer
 
@@ -18,19 +20,13 @@
 #define FREQ_MIN_INIT 160.0
 #define FREQ_MAX_INIT 1450.0
 
-// ***** flags contains 8 boolean flags that help control overall state machine ***** //
-
-uint8_t flags = 0;
-
-#define PLAYING 0
-#define EDIT_MODE 1
-#define SCROLLING 2
-#define SELECT_ON_RELEASE 3
-#define OTO_TUNE_ON 4
-#define GET_FLAG(n) flags | (0b01111111 >> n)
-#define SET_FLAG(n) flags |= (0b10000000 >> n)
-#define CLEAR_FLAG(n) flags &= (0b01111111 >> n)
-#define TOGGLE_FLAG(n) flags ^= (0b10000000 >> n)
+// ***** flags controlling overall state machine ***** //
+static bool oto_tune_on = false;
+static bool playing = false;
+static bool scrolling = false;
+static bool select_on_release = false;
+static bool edit_mode = false;
+static bool new_vol = false;
 
 //ring buffer containing samples in moving average
 static int avgs[FILTER_SIZE];
@@ -43,6 +39,8 @@ static int dt;
 
 //most recent value from potentiometer
 static int pot_val;
+//current volume
+static int vol;
 
 //minimum and maximum frequencies
 static float freq_min = FREQ_MIN_INIT;
@@ -67,7 +65,8 @@ static float a_coeff;
 static float b_coeff;
   
 AudioControlSGTL5000 codec;
-IntervalTimer pot_read_int;
+IntervalTimer neck_read_int;
+IntervalTimer vol_read_int;
 
 Bounce debounce_1 = Bounce();
 Bounce debounce_2 = Bounce();
@@ -91,7 +90,7 @@ int pot_to_freq() {
   interrupts();
   in /= good;
   int freq = 1.0/(a_coeff * in / 65536.0 + b_coeff);
-  if (GET_FLAG(OTO_TUNE_ON)) return oto_tune(freq);
+  if (oto_tune_on) return oto_tune(freq);
   return freq;
 }
 
@@ -104,6 +103,17 @@ void read_scale_neck() {
   } 
   avgs[avg_ind] = pot_val;
   avg_ind = (avg_ind + 1) % FILTER_SIZE; 
+}
+
+void read_volume(){
+  vol = analogRead(VOLUME_PIN);
+  new_vol = true;
+}
+
+void change_volume(){
+  float a = (vol & 0xff00)/65280.0;
+  codec.dacVolume(a);
+  new_vol = false;
 }
 
 void disp_setup(){
@@ -135,24 +145,27 @@ void setup() {
   pinMode(BUTTON_LEFT, INPUT);
   pinMode(BUTTON_RIGHT, INPUT);
   pinMode(POT_PIN, INPUT);
+  pinMode(VOLUME_PIN, INPUT);
+  
   //enter edit mode if both buttons are down at startup
   if (digitalRead(BUTTON_LEFT) == 1 && digitalRead(BUTTON_RIGHT) == 1){
-    SET_FLAG(EDIT_MODE);
+    edit_mode = 1;
   }
   debounce_1.attach(BUTTON_LEFT);
   debounce_2.attach(BUTTON_RIGHT);
-  debounce_1.interval(50);
-  debounce_2.interval(50);
-  pot_read_int.begin(read_scale_neck, POLL_NECK_MICROS);
+  debounce_1.interval(5);
+  debounce_2.interval(5);
+
   analogReadResolution(16);
 
   AudioMemory(20);
   AudioProcessorUsageMaxReset();
   AudioMemoryUsageMaxReset();
   codec.enable();
-  codec.volume(1);
-  codec.lineOutLevel(31);
+  neck_read_int.begin(read_scale_neck, POLL_NECK_MICROS);
+  vol_read_int.begin(read_volume, POLL_VOLUME_MICROS);
   codec.lineInLevel(0);
+  codec.lineOutLevel(31);
   envelope1.attack(5);
   envelope1.hold(30);
   envelope1.decay(30);
@@ -169,11 +182,11 @@ void setup() {
   ms.get_root_menu().add_item(&mm_mi2);
   ms.get_root_menu().add_menu(&mu1);
   mu1.add_item(&mu1_mi1);
-  if (!GET_FLAG(EDIT_MODE)){
+  if (edit_mode){
+    ms.display();
+  }else{
     disp_setup();
     disp_update_non_menu();
-  }else{
-    ms.display();
   }
   
   waveform1.begin(1, pot_to_freq(), WAVEFORM_SQUARE);
@@ -181,17 +194,17 @@ void setup() {
 }
 
 void button_1_pressed(){
-  if (GET_FLAG(EDIT_MODE)){
+  if (edit_mode){
     ms.back();
     ms.display();
   }
 }
 
 void button_1_released(){
-  if (GET_FLAG(EDIT_MODE)){
+  if (edit_mode){
     
   }else{
-    if (!GET_FLAG(PLAYING)){
+    if (!playing){
       change_octave(-1);
       disp_update_non_menu();
     }
@@ -199,21 +212,21 @@ void button_1_released(){
 }
 
 void button_2_pressed(){
-  if (GET_FLAG(EDIT_MODE)){
-    SET_FLAG(SCROLLING);
-    SET_FLAG(SELECT_ON_RELEASE);
+  if (edit_mode){
+    scrolling=true;
+    select_on_release=true;
   }
 }
 
 void button_2_released(){
-  if (GET_FLAG(EDIT_MODE)){
-    CLEAR_FLAG(SCROLLING);
-    if (GET_FLAG(SELECT_ON_RELEASE)){
+  if (edit_mode){
+    scrolling=false;
+    if (select_on_release){
       ms.select();
       ms.display();
     }
   }else{
-    if (!GET_FLAG(PLAYING)){
+    if (!playing){
       change_octave(1);
       disp_update_non_menu();
     }
@@ -229,10 +242,10 @@ void loop() {
   int pv = pot_val;
   interrupts();
   
-  if (GET_FLAG(SCROLLING)){
-    if (GET_FLAG(PLAYING)){
+  if (scrolling){
+    if (playing){
       envelope1.noteOff();
-      CLEAR_FLAG(PLAYING);
+      playing = false;
     }
     if (pv != 0){
       Menu const* m = ms.get_current_menu();
@@ -244,16 +257,16 @@ void loop() {
         ms.prev();
         ms.display();
       }
-      CLEAR_FLAG(SELECT_ON_RELEASE);
+      select_on_release = false;
     } 
   }
   //if neck is currently pressed
   else{
-    if (GET_FLAG(PLAYING)) {
+    if (playing) {
       if (pv == 0) {
         //if neck is released
         envelope1.noteOff();
-        CLEAR_FLAG(PLAYING);
+        playing=false;
       } else {
         //if neck is held down, update frequency with moving average
         waveform1.frequency(pot_to_freq());
@@ -265,7 +278,7 @@ void loop() {
         waveform1.frequency(pot_to_freq());
         envelope1.noteOn();
         AudioInterrupts();
-        SET_FLAG(PLAYING);
+        playing=true;;
       }
     }
   }
@@ -274,6 +287,8 @@ void loop() {
   else if (debounce_1.fallingEdge()) button_1_released();
   if (debounce_2.risingEdge()) button_2_pressed();
   else if (debounce_2.fallingEdge()) button_2_released();
-
+  
+  if (new_vol) change_volume();
+  
   while (millis() - dt < EVENT_LOOP_DT) {}
 }
