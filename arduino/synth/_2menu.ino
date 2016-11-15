@@ -1,7 +1,3 @@
-#include <MenuSystem.h>
-#include <Adafruit_SSD1306.h>
-#define OLED_RESET 4
-
 Adafruit_SSD1306 display(OLED_RESET);
 
 class MyRenderer : public MenuComponentRenderer
@@ -50,11 +46,7 @@ public:
 
 MyRenderer my_renderer;
 
-// Menu variables
-
 MenuSystem ms(my_renderer);
-
-// forward declarations
 
 void on_item1_selected(MenuItem* p_menu_item);
 void on_item2_selected(MenuItem* p_menu_item);
@@ -66,8 +58,25 @@ MenuItem mm_mi2("2", &on_item2_selected);
 Menu mu1("3");
 MenuItem mu1_mi1("Oto Tune Disabled", &on_item3_selected);
 MenuItem mu1_mi2("4", &on_item4_selected);
-// Menu callback function
 
+void on_item1_selected(MenuItem* p_menu_item)
+{
+}
+
+void on_item2_selected(MenuItem* p_menu_item)
+{
+}
+
+void on_item3_selected(MenuItem* p_menu_item)
+{
+  oto_tune_on = !oto_tune_on;
+  if (oto_tune_on){
+    p_menu_item->set_name("Oto Tune Enabled");
+  }else p_menu_item->set_name("Oto Tune Disabled");
+}
+void on_item4_selected(MenuItem* p_menu_item){
+  
+}
 
 
 

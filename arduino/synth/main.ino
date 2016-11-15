@@ -1,0 +1,112 @@
+void setup() {
+  pinMode(BUTTON_LEFT, INPUT);
+  pinMode(BUTTON_RIGHT, INPUT);
+  pinMode(POT_PIN, INPUT);
+  pinMode(VOLUME_PIN, INPUT);
+  
+  //enter edit mode if both buttons are down at startup
+  if (digitalRead(BUTTON_LEFT) == 1 && digitalRead(BUTTON_RIGHT) == 1){
+    edit_mode = 1;
+  }
+  debounce_1.attach(BUTTON_LEFT);
+  debounce_2.attach(BUTTON_RIGHT);
+  debounce_1.interval(5);
+  debounce_2.interval(5);
+
+  analogReadResolution(ADC_RES);
+
+  AudioMemory(20);
+  AudioProcessorUsageMaxReset();
+  AudioMemoryUsageMaxReset();
+  codec.enable();
+  neck_read_int.begin(read_scale_neck, POLL_NECK_MICROS);
+  vol_read_int.begin(read_volume, POLL_VOLUME_MICROS);
+  codec.lineInLevel(0);
+  codec.lineOutLevel(31);
+  envelope1.attack(5);
+  envelope1.hold(30);
+  envelope1.decay(30);
+  envelope1.sustain(.5);
+  envelope1.release(50);
+  mixer1.gain(1,.5);
+  mixer1.gain(2,.5);
+  mixer2.gain(1,.5);
+  mixer2.gain(2,.5);
+  
+  change_octave(octave);
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
+  ms.get_root_menu().add_item(&mm_mi1);
+  ms.get_root_menu().add_item(&mm_mi2);
+  ms.get_root_menu().add_menu(&mu1);
+  mu1.add_item(&mu1_mi1);
+  if (edit_mode){
+    ms.display();
+  }else{
+    disp_setup();
+    disp_update_non_menu();
+  }
+  
+  waveform1.begin(1, pot_to_freq(), WAVEFORM_SQUARE);
+  waveform1.pulseWidth(0.5);
+  Serial.println(max_adc);
+}
+
+void loop() {
+  debounce_1.update();
+  debounce_2.update();
+  
+  dt = millis();
+  noInterrupts();
+  int pv = pot_val;
+  interrupts();
+  
+  if (scrolling){
+    if (playing){
+      envelope1.noteOff();
+      playing = false;
+    }
+    if (pv != 0){
+      Menu const* m = ms.get_current_menu();
+      int index = (max_adc-pv) * m->get_num_components() / max_adc;
+      if (index > m->get_current_component_num()){
+        ms.next();
+        ms.display();
+      }else if (index < m->get_current_component_num()){
+        ms.prev();
+        ms.display();
+      }
+      select_on_release = false;
+    } 
+  }
+  //if neck is currently pressed
+  else{
+    if (playing) {
+      if (pv == 0) {
+        //if neck is released
+        envelope1.noteOff();
+        playing=false;
+      } else {
+        //if neck is held down, update frequency with moving average
+        waveform1.frequency(pot_to_freq());
+      }
+    } else {
+      //neck pressed
+      if (pv != 0) {
+        AudioNoInterrupts(); 
+        waveform1.frequency(pot_to_freq());
+        envelope1.noteOn();
+        AudioInterrupts();
+        playing=true;
+      }
+    }
+  }
+
+  if (debounce_1.risingEdge()) button_1_pressed();
+  else if (debounce_1.fallingEdge()) button_1_released();
+  if (debounce_2.risingEdge()) button_2_pressed();
+  else if (debounce_2.fallingEdge()) button_2_released();
+  
+  if (new_vol) change_volume();
+  
+  while (millis() - dt < EVENT_LOOP_DT) {}
+}
