@@ -61,27 +61,13 @@ void on_item2_selected(MenuItem* p_menu_item);
 void on_item3_selected(MenuItem* p_menu_item);
 void on_item4_selected(MenuItem* p_menu_item);
 
-MenuItem mm_mi1("Level 1 Item 1 (Item)", &on_item1_selected);
-MenuItem mm_mi2("Level 1 Item 2 (Item)", &on_item2_selected);
-Menu mu1("Level 1 Item 3 (Menu)");
-MenuItem mu1_mi1("Level 2 Item 1 (Item)", &on_item3_selected);
-MenuItem mu1_mi2("Level 2 Item 2 (Item)", &on_item4_selected);
+MenuItem mm_mi1("1", &on_item1_selected);
+MenuItem mm_mi2("2", &on_item2_selected);
+Menu mu1("3");
+MenuItem mu1_mi1("Oto Tune Disabled", &on_item3_selected);
+MenuItem mu1_mi2("4", &on_item4_selected);
 // Menu callback function
 
 
-void on_item1_selected(MenuItem* p_menu_item)
-{
-}
-
-void on_item2_selected(MenuItem* p_menu_item)
-{
-}
-
-void on_item3_selected(MenuItem* p_menu_item)
-{
-}
-void on_item4_selected(MenuItem* p_menu_item){
-  
-}
 
 

@@ -20,6 +20,12 @@
 #define FREQ_MIN_INIT 160.0
 #define FREQ_MAX_INIT 1450.0
 
+#define ADC_RES 16
+
+//values pertaining to ADC resolution
+static const int max_adc = pow(2,ADC_RES);
+static const int thresh_adc = max_adc/10;
+
 // ***** flags controlling overall state machine ***** //
 static bool oto_tune_on = false;
 static bool playing = false;
@@ -42,6 +48,7 @@ static int pot_val;
 //current volume
 static int vol;
 
+
 //minimum and maximum frequencies
 static float freq_min = FREQ_MIN_INIT;
 static float freq_max = FREQ_MAX_INIT;
@@ -57,8 +64,8 @@ static int octave = 0;
 #define MIN_OCT -2
 
 //neck scaling coefficients
-static int neckscale = 65536 * PULL;
-static int neckscale_2 = 65536 / (RMAX-RMIN);
+static int neckscale = max_adc * PULL;
+static int neckscale_2 = max_adc / (RMAX-RMIN);
 
 //frequency coefficients
 static float a_coeff;
@@ -70,6 +77,30 @@ IntervalTimer vol_read_int;
 
 Bounce debounce_1 = Bounce();
 Bounce debounce_2 = Bounce();
+
+
+// *** menu declarations, get these out of here
+
+void on_item1_selected(MenuItem* p_menu_item)
+{
+}
+
+void on_item2_selected(MenuItem* p_menu_item)
+{
+}
+
+void on_item3_selected(MenuItem* p_menu_item)
+{
+  oto_tune_on = !oto_tune_on;
+  if (oto_tune_on){
+    p_menu_item->set_name("Oto Tune Enabled");
+  }else p_menu_item->set_name("Oto Tune Disabled");
+}
+void on_item4_selected(MenuItem* p_menu_item){
+  
+}
+
+// *** menu declarations, get these out of here
 
 int oto_tune(int f_orig){
   int freq;
@@ -89,15 +120,15 @@ int pot_to_freq() {
   }
   interrupts();
   in /= good;
-  int freq = 1.0/(a_coeff * in / 65536.0 + b_coeff);
+  int freq = 1.0/(in / (1.0*max_adc) * a_coeff + b_coeff);
   if (oto_tune_on) return oto_tune(freq);
   return freq;
 }
 
 void read_scale_neck() {
-  // resistance of neck, accounting for voltage division: PULL * (65536-N)/N
+  // resistance of neck, accounting for voltage division: PULL * (max_adc-N)/N
   pot_val = analogRead(A10);
-  if (pot_val < 6000) pot_val = 0;
+  if (pot_val < thresh_adc) pot_val = 0;
   else {
     pot_val = (neckscale/pot_val-PULL-RMIN)*neckscale_2;
   } 
@@ -111,7 +142,7 @@ void read_volume(){
 }
 
 void change_volume(){
-  float a = (vol & 0xff00)/65280.0;
+  float a = vol / (1.0*max_adc);
   codec.dacVolume(a);
   new_vol = false;
 }
@@ -156,7 +187,7 @@ void setup() {
   debounce_1.interval(5);
   debounce_2.interval(5);
 
-  analogReadResolution(16);
+  analogReadResolution(ADC_RES);
 
   AudioMemory(20);
   AudioProcessorUsageMaxReset();
@@ -191,6 +222,7 @@ void setup() {
   
   waveform1.begin(1, pot_to_freq(), WAVEFORM_SQUARE);
   waveform1.pulseWidth(0.5);
+  Serial.println(max_adc);
 }
 
 void button_1_pressed(){
@@ -249,7 +281,7 @@ void loop() {
     }
     if (pv != 0){
       Menu const* m = ms.get_current_menu();
-      int index = (65536-pv) * m->get_num_components() / 65536;
+      int index = (max_adc-pv) * m->get_num_components() / max_adc;
       if (index > m->get_current_component_num()){
         ms.next();
         ms.display();
