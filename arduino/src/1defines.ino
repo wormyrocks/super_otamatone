@@ -25,6 +25,9 @@
 //analogRead resolution
 #define ADC_RES 16
 
+#define MAX_OCT 2
+#define MIN_OCT -2
+
 //values pertaining to ADC resolution
 static const int max_adc = pow(2,ADC_RES);
 static const int thresh_adc = max_adc/10;
@@ -62,8 +65,6 @@ static const float a_tune = 440;
 
 //current octave
 static int octave = 0;
-#define MAX_OCT 2
-#define MIN_OCT -2
 
 //neck scaling coefficients
 static int neckscale = max_adc * PULL;
@@ -79,3 +80,21 @@ IntervalTimer vol_read_int;
 
 Bounce debounce_1 = Bounce();
 Bounce debounce_2 = Bounce();
+
+//function prototypes
+
+int oto_tune(int freq);
+int pot_to_freq();
+void read_volume();
+void disp_setup();
+void disp_update_non_menu();
+void change_volume();
+void change_octave(int oct);
+int oto_tune(int f_orig);
+
+//function prototypes for callbacks
+void button_1_pressed();
+void button_1_released();
+void button_2_pressed();
+void button_2_released();
+void read_scale_neck();

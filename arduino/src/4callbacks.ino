@@ -36,14 +36,6 @@ void button_2_released(){
   }
 }
 
-
-int oto_tune(int f_orig){
-  int freq;
-  freq = round(log(f_orig/a_tune)/log_a_exp);
-  freq = a_tune * exp(freq * log_a_exp);
-  return freq;
-}
-
 void read_scale_neck() {
   // resistance of neck, accounting for voltage division: PULL * (max_adc-N)/N
   pot_val = analogRead(A10);

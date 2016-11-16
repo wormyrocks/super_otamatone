@@ -50,3 +50,10 @@ void change_octave(int oct){
     b_coeff = 1.0/freq_max;
   }else octave -= oct;
 }
+
+int oto_tune(int f_orig){
+  int freq;
+  freq = round(log(f_orig/a_tune)/log_a_exp);
+  freq = a_tune * exp(freq * log_a_exp);
+  return freq;
+}

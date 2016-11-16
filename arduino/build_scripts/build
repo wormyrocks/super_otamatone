@@ -1,0 +1,3 @@
+cat ../src/*.ino > all.ino
+make
+./tyc upload build-teensy31/build-scripts.hex
