@@ -1,3 +1,6 @@
 [submodule "arduino/src/arduino-menusystem"]
-	path = arduino/src/arduino-menusystem
+	path = arduino/src/libs/arduino-menusystem
+	url = https://github.com/wormyrocks/arduino-menusystem
+[submodule "arduino/src/libs/arduino-menusystem"]
+	path = arduino/src/libs/arduino-menusystem
 	url = https://github.com/wormyrocks/arduino-menusystem
