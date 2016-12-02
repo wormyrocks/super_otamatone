@@ -34,11 +34,7 @@ void setup() {
   mixer2.gain(2,.5);
   
   change_octave(octave);
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
-  ms.get_root_menu().add_item(&mm_mi1);
-  ms.get_root_menu().add_item(&mm_mi2);
-  ms.get_root_menu().add_menu(&mu1);
-  mu1.add_item(&mu1_mi1);
+  oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3D (for the 128x64)
   if (edit_mode){
     ms.display();
   }else{
@@ -48,10 +44,20 @@ void setup() {
   
   waveform1.begin(1, pot_to_freq(), WAVEFORM_SQUARE);
   waveform1.pulseWidth(0.5);
-  Serial.println(max_adc);
+  
+  presets[0].en=true;
+  preset_menu_shown = presets[0].en;
+  ms.get_root_menu().set_name("Patch Editor");
+  ms.get_root_menu().add_menu(&edit_preset);
+  ms.get_root_menu().add_menu(&main_settings);
+  edit_preset.add_menu(&preset_no);
+  edit_preset.add_item(&enable_preset);
+  edit_preset.add_menu(&env_edit);
+  edit_preset.add_menu(&eff_edit);
 }
 
 void loop() {
+
   debounce_1.update();
   debounce_2.update();
   

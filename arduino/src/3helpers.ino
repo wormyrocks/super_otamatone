@@ -21,17 +21,17 @@ void read_volume(){
 }
 
 void disp_setup(){
-  display.setTextSize(2);
-  display.setTextColor(WHITE);
+  oled.setTextSize(2);
+  oled.setTextColor(WHITE);
 }
 
 void disp_update_non_menu(){
-  display.clearDisplay();
-  display.setCursor(0,0);
-  display.print("Octave: ");
-  if (octave >= 0) display.print("+");
-  display.println(octave);
-  display.display();
+  oled.clearDisplay();
+  oled.setCursor(0,0);
+  oled.print("Octave: ");
+  if (octave >= 0) oled.print("+");
+  oled.println(octave);
+  oled.display();
 }
 
 void change_volume(){
