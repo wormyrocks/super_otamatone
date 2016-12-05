@@ -5,10 +5,10 @@
 
 //pin values
 #define OLED_RESET 4              //unused
-#define POT_PIN A10               //neck potentiometer reading
-#define VOLUME_PIN 15             //volume potentiometer reading
-#define BUTTON_LEFT 0             //left button
-#define BUTTON_RIGHT 1            //right button
+#define POT_PIN 20                //neck potentiometer reading
+#define VOLUME_PIN 23             //volume potentiometer reading
+#define BUTTON_LEFT 22            //left button
+#define BUTTON_RIGHT 21           //right button
 
 #define RMIN 23                   // minimum neck resistance, in kOhms
 #define RMAX 190                  // maximum neck resistance, in kOhms
