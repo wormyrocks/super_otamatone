@@ -1,5 +1,0 @@
-rm all.ino
-cat ../src/*.ino > all.ino
-make
-./tyc upload build-teensy31/build_scripts.hex
-./tyc monitor
