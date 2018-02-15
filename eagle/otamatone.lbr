@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.3.1">
+<eagle version="8.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
@@ -582,37 +582,27 @@
 <text x="0" y="0" size="0.7" layer="51" align="center">&gt;NAME</text>
 </package>
 <package name="TALL_BOI">
-<smd name="P$1" x="0" y="0" dx="3.9" dy="1.4" layer="16" roundness="100" rot="R90"/>
-<smd name="CASE" x="0" y="0" dx="3.9" dy="1.4" layer="1" roundness="100" rot="R90"/>
-<wire x1="0.35" y1="-0.85" x2="0.35" y2="0.8" width="0.05" layer="20"/>
-<wire x1="-0.35" y1="0.8" x2="-0.35" y2="-0.85" width="0.05" layer="20"/>
-<wire x1="-0.35" y1="0.8" x2="0.35" y2="0.8" width="0.05" layer="20" curve="-196.260205"/>
-<wire x1="0.35" y1="-0.85" x2="-0.35" y2="-0.85" width="0.05" layer="20" curve="-180"/>
-<smd name="P$3" x="7.3" y="0" dx="3.9" dy="1.4" layer="1" roundness="100" rot="R90"/>
-<wire x1="6.95" y1="0.8" x2="6.95" y2="-0.85" width="0.05" layer="20"/>
-<wire x1="7.65" y1="-0.85" x2="7.65" y2="0.8" width="0.05" layer="20"/>
-<wire x1="6.95" y1="0.8" x2="7.65" y2="0.8" width="0.05" layer="20" curve="-196.260205"/>
-<wire x1="7.65" y1="-0.85" x2="6.95" y2="-0.85" width="0.05" layer="20" curve="-180"/>
-<smd name="CASE@2" x="7.3" y="0" dx="3.9" dy="1.4" layer="16" roundness="100" rot="R90"/>
-<pad name="3" x="3.65" y="1.3" drill="0.7" diameter="1.2" rot="R90"/>
-<pad name="1" x="5.25" y="1.3" drill="0.7" diameter="1.2" rot="R90"/>
-<pad name="5" x="2.05" y="1.3" drill="0.7" diameter="1.2" rot="R90"/>
-<pad name="4" x="2.85" y="-1.3" drill="0.7" diameter="1.2" rot="R90"/>
-<pad name="2" x="4.45" y="-1.3" drill="0.7" diameter="1.2" rot="R90"/>
-<wire x1="-0.8" y1="2.3" x2="-0.8" y2="-2.4" width="0.05" layer="21"/>
-<wire x1="-0.8" y1="-2.4" x2="8.1" y2="-2.4" width="0.05" layer="21"/>
-<wire x1="8.1" y1="-2.4" x2="8.1" y2="2.3" width="0.05" layer="21"/>
-<wire x1="8.1" y1="2.3" x2="-0.8" y2="2.3" width="0.05" layer="21"/>
-<text x="0.6" y="2.8" size="1.27" layer="21">&gt;NAME</text>
-<text x="0.1" y="-4" size="1.27" layer="27">&gt;VALUE</text>
+<pad name="3" x="0" y="-1.9" drill="0.6" rot="R90"/>
+<pad name="1" x="-1.6" y="-1.9" drill="0.6" rot="R90"/>
+<pad name="5" x="1.6" y="-1.9" drill="0.6" rot="R90"/>
+<pad name="4" x="0.8" y="0" drill="0.6" rot="R90"/>
+<pad name="2" x="-0.8" y="0" drill="0.6" rot="R90"/>
+<text x="-2.4" y="1.8" size="1.27" layer="21">&gt;NAME</text>
+<text x="-2.9" y="-5" size="1.27" layer="27">&gt;VALUE</text>
+<pad name="CASE" x="-4.2" y="-1" drill="2"/>
+<pad name="CASE@2" x="4.2" y="-1" drill="2"/>
+<wire x1="-6" y1="1" x2="6" y2="1" width="0.127" layer="21"/>
+<wire x1="6" y1="1" x2="6" y2="-3" width="0.127" layer="21"/>
+<wire x1="6" y1="-3" x2="-6" y2="-3" width="0.127" layer="21"/>
+<wire x1="-6" y1="-3" x2="-6" y2="1" width="0.127" layer="21"/>
 </package>
 <package name="5PIN_POT">
 <circle x="0" y="0" radius="8.898128125" width="0.127" layer="20"/>
-<smd name="1" x="10.3" y="0" dx="3" dy="4" layer="1" roundness="100"/>
-<smd name="0" x="-10.3" y="0" dx="3" dy="4.5" layer="1" roundness="100"/>
-<smd name="3" x="0" y="-12" dx="3" dy="3" layer="1" roundness="100"/>
-<smd name="4" x="6" y="-10.3" dx="3" dy="3" layer="1" roundness="100"/>
-<smd name="2" x="-6" y="-10.3" dx="3" dy="3" layer="1" roundness="100"/>
+<smd name="1" x="10.3" y="0" dx="3" dy="4" layer="16" roundness="100"/>
+<smd name="0" x="-10.3" y="0" dx="3" dy="4.5" layer="16" roundness="100"/>
+<smd name="3" x="0" y="-12" dx="3" dy="3" layer="16" roundness="100"/>
+<smd name="4" x="6" y="-10.3" dx="3" dy="3" layer="16" roundness="100"/>
+<smd name="2" x="-6" y="-10.3" dx="3" dy="3" layer="16" roundness="100"/>
 </package>
 <package name="QFN16" urn="urn:adsk.eagle:footprint:21050/1" locally_modified="yes">
 <description>&lt;b&gt;QFN 16&lt;/b&gt; 3x3 mm&lt;p&gt;
@@ -683,6 +673,51 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <rectangle x1="-0.4625" y1="1.2625" x2="-0.0375" y2="1.5125" layer="31" rot="R270"/>
 <rectangle x1="-1.025" y1="1.225" x2="-0.475" y2="1.575" layer="29" rot="R270"/>
 <rectangle x1="-0.9625" y1="1.2625" x2="-0.5375" y2="1.5125" layer="31" rot="R270"/>
+</package>
+<package name="AUDIOJACK">
+<smd name="G" x="0.9" y="4.4" dx="3.1" dy="1.3" layer="1"/>
+<smd name="R" x="0.9" y="-3.3" dx="3.1" dy="1.3" layer="1"/>
+<smd name="P$6" x="-3.5" y="-0.9" dx="2.5" dy="0.8" layer="1" rot="R90"/>
+<wire x1="-4.5" y1="5.6" x2="4" y2="5.6" width="0.127" layer="21"/>
+<wire x1="4" y1="5.6" x2="4" y2="-4.5" width="0.127" layer="21"/>
+<wire x1="4" y1="-4.5" x2="-4.5" y2="-4.5" width="0.127" layer="21"/>
+<wire x1="-4.5" y1="-4.5" x2="-4.5" y2="5.6" width="0.127" layer="21"/>
+<smd name="L" x="-3.5" y="-0.9" dx="3.1" dy="1.3" layer="1" rot="R90"/>
+<wire x1="-3.9" y1="0.35" x2="-3.1" y2="0.35" width="0.127" layer="20"/>
+<wire x1="-3.1" y1="0.35" x2="-3.1" y2="-2.15" width="0.127" layer="20"/>
+<wire x1="-3.1" y1="-2.15" x2="-3.9" y2="-2.15" width="0.127" layer="20"/>
+<wire x1="-3.9" y1="-2.15" x2="-3.9" y2="0.35" width="0.127" layer="20"/>
+<wire x1="-0.35" y1="-2.9" x2="2.15" y2="-2.9" width="0.127" layer="20"/>
+<wire x1="2.15" y1="-2.9" x2="2.15" y2="-3.7" width="0.127" layer="20"/>
+<wire x1="2.15" y1="-3.7" x2="-0.35" y2="-3.7" width="0.127" layer="20"/>
+<wire x1="-0.35" y1="-3.7" x2="-0.35" y2="-2.9" width="0.127" layer="20"/>
+<wire x1="-0.35" y1="4.8" x2="-0.35" y2="4" width="0.127" layer="20"/>
+<wire x1="-0.35" y1="4" x2="2.15" y2="4" width="0.127" layer="20"/>
+<wire x1="2.15" y1="4" x2="2.15" y2="4.8" width="0.127" layer="20"/>
+<wire x1="2.15" y1="4.8" x2="-0.35" y2="4.8" width="0.127" layer="20"/>
+<text x="-6" y="-1.45" size="1.27" layer="20">L</text>
+<text x="0.2" y="-6.25" size="1.27" layer="20">R</text>
+<text x="-1.05" y="6.3" size="1.27" layer="20">GND</text>
+<smd name="L1" x="-3.5" y="-0.9" dx="3.1" dy="1.3" layer="16" rot="R90"/>
+<smd name="R1" x="0.9" y="-3.3" dx="3.1" dy="1.3" layer="16"/>
+<smd name="G1" x="0.9" y="4.4" dx="3.1" dy="1.3" layer="16"/>
+</package>
+<package name="CRYS">
+<wire x1="0" y1="0" x2="0" y2="2.5" width="0.127" layer="21"/>
+<wire x1="0" y1="2.5" x2="3.2" y2="2.5" width="0.127" layer="21"/>
+<wire x1="3.2" y1="2.5" x2="3.2" y2="0" width="0.127" layer="21"/>
+<wire x1="3.2" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
+<smd name="P$1" x="0.6" y="0.5" dx="1" dy="0.8" layer="1"/>
+<smd name="P$2" x="2.6" y="0.5" dx="1" dy="0.8" layer="1"/>
+<smd name="P$3" x="0.6" y="2" dx="1" dy="0.8" layer="1"/>
+<polygon width="0.01" layer="1">
+<vertex x="2.104" y="1.883"/>
+<vertex x="2.104" y="2.394"/>
+<vertex x="3.095" y="2.394"/>
+<vertex x="3.095" y="1.605"/>
+<vertex x="2.35" y="1.605"/>
+</polygon>
+<smd name="P$4" x="2.72" y="2" dx="0.75" dy="0.8" layer="1"/>
 </package>
 </packages>
 <symbols>
@@ -795,20 +830,15 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <symbol name="CRYSTAL">
 <wire x1="1.397" y1="0" x2="2.54" y2="0" width="0.1524" layer="94"/>
 <wire x1="-2.54" y1="0" x2="-1.397" y2="0" width="0.1524" layer="94"/>
-<wire x1="-0.762" y1="1.016" x2="-0.762" y2="0.762" width="0.254" layer="94"/>
-<wire x1="-0.762" y1="0.762" x2="-0.762" y2="0.254" width="0.254" layer="94"/>
-<wire x1="-0.762" y1="0.254" x2="-0.762" y2="0" width="0.254" layer="94"/>
-<wire x1="-0.762" y1="0" x2="-0.762" y2="-0.762" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="1.016" x2="-0.762" y2="0.254" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="0.254" x2="-0.762" y2="-0.762" width="0.254" layer="94"/>
 <wire x1="-0.762" y1="-0.762" x2="-0.762" y2="-1.016" width="0.254" layer="94"/>
 <wire x1="-0.762" y1="-1.016" x2="0" y2="-1.016" width="0.254" layer="94"/>
-<wire x1="0" y1="-1.016" x2="0.254" y2="-1.016" width="0.254" layer="94"/>
-<wire x1="0.254" y1="-1.016" x2="0.762" y2="-1.016" width="0.254" layer="94"/>
+<wire x1="0" y1="-1.016" x2="0.762" y2="-1.016" width="0.254" layer="94"/>
 <wire x1="0.762" y1="-1.016" x2="0.762" y2="-0.254" width="0.254" layer="94"/>
-<wire x1="0.762" y1="-0.254" x2="0.762" y2="0.508" width="0.254" layer="94"/>
-<wire x1="0.762" y1="0.508" x2="0.762" y2="0.762" width="0.254" layer="94"/>
+<wire x1="0.762" y1="-0.254" x2="0.762" y2="0.762" width="0.254" layer="94"/>
 <wire x1="0.762" y1="0.762" x2="0.762" y2="1.016" width="0.254" layer="94"/>
 <wire x1="0.762" y1="1.016" x2="0" y2="1.016" width="0.254" layer="94"/>
-<wire x1="0" y1="1.016" x2="-0.254" y2="1.016" width="0.254" layer="94"/>
 <wire x1="1.397" y1="1.778" x2="1.397" y2="0" width="0.254" layer="94"/>
 <wire x1="1.397" y1="0" x2="1.397" y2="-1.778" width="0.254" layer="94"/>
 <wire x1="-1.397" y1="1.778" x2="-1.397" y2="0" width="0.254" layer="94"/>
@@ -819,10 +849,11 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <text x="2.54" y="0.635" size="0.8636" layer="93">2</text>
 <pin name="2" x="2.54" y="0" visible="off" length="point" direction="pas" swaplevel="1" rot="R180"/>
 <pin name="1" x="-2.54" y="0" visible="off" length="point" direction="pas" swaplevel="1"/>
-<wire x1="-0.762" y1="1.016" x2="-0.254" y2="1.016" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="1.016" x2="0" y2="1.016" width="0.254" layer="94"/>
 <wire x1="-0.762" y1="0.254" x2="0" y2="1.016" width="0.254" layer="94"/>
 <wire x1="-0.762" y1="-0.762" x2="0.762" y2="0.762" width="0.254" layer="94"/>
 <wire x1="0" y1="-1.016" x2="0.762" y2="-0.254" width="0.254" layer="94"/>
+<pin name="GND" x="0" y="-3.556" visible="off" length="short" rot="R90"/>
 </symbol>
 <symbol name="C">
 <wire x1="-1.016" y1="0.381" x2="0" y2="0.381" width="0.254" layer="94"/>
@@ -993,33 +1024,39 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <wire x1="0.508" y1="1.524" x2="2.54" y2="1.524" width="0.254" layer="94"/>
 </symbol>
 <symbol name="SWITCHEDPOT">
-<wire x1="-20.32" y1="20.32" x2="-20.32" y2="15.24" width="0.254" layer="94"/>
-<wire x1="-20.32" y1="15.24" x2="-20.32" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="-20.32" y1="-5.08" x2="-20.32" y2="-15.24" width="0.254" layer="94"/>
-<wire x1="-20.32" y1="-15.24" x2="-5.08" y2="-15.24" width="0.254" layer="94"/>
-<wire x1="-5.08" y1="-15.24" x2="7.62" y2="-15.24" width="0.254" layer="94"/>
-<wire x1="7.62" y1="-15.24" x2="7.62" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="7.62" y1="-5.08" x2="7.62" y2="15.24" width="0.254" layer="94"/>
-<wire x1="7.62" y1="15.24" x2="7.62" y2="20.32" width="0.254" layer="94"/>
-<wire x1="7.62" y1="20.32" x2="-20.32" y2="20.32" width="0.254" layer="94"/>
-<pin name="SW0" x="-25.4" y="15.24" length="middle"/>
-<pin name="SW1" x="12.7" y="15.24" length="middle" rot="R180"/>
-<wire x1="-20.32" y1="15.24" x2="-12.7" y2="15.24" width="0.254" layer="94"/>
-<wire x1="-12.7" y1="15.24" x2="-2.54" y2="10.16" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="15.24" x2="7.62" y2="15.24" width="0.254" layer="94"/>
-<pin name="POTL" x="-25.4" y="-5.08" length="middle"/>
-<pin name="POTH" x="12.7" y="-5.08" length="middle" rot="R180"/>
-<pin name="WIPER" x="-5.08" y="-20.32" length="middle" rot="R90"/>
-<wire x1="-20.32" y1="-5.08" x2="-12.7" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="-12.7" y1="-2.54" x2="-12.7" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="-12.7" y1="-7.62" x2="-5.08" y2="-7.62" width="0.254" layer="94"/>
+<pin name="SW0" x="-7.62" y="2.54" visible="pad" length="middle"/>
+<pin name="SW1" x="7.62" y="2.54" visible="pad" length="middle" rot="R180"/>
+<pin name="POTL" x="-7.62" y="-3.81" visible="pad" length="middle"/>
+<pin name="POTH" x="7.62" y="-3.81" visible="pad" length="middle" rot="R180"/>
+<pin name="WIPER" x="0" y="-10.16" visible="pad" length="middle" rot="R90"/>
+<text x="-5.08" y="5.588" size="1.27" layer="125">&gt;NAME</text>
+<wire x1="-5.08" y1="5.08" x2="-5.08" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="2.54" x2="-5.08" y2="-3.81" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-3.81" x2="-5.08" y2="-7.62" width="0.254" layer="94"/>
 <wire x1="-5.08" y1="-7.62" x2="0" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="0" y1="-7.62" x2="0" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="0" y1="-5.08" x2="0" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="0" y1="-2.54" x2="-12.7" y2="-2.54" width="0.254" layer="94"/>
-<wire x1="0" y1="-5.08" x2="7.62" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="-5.08" y1="-7.62" x2="-5.08" y2="-15.24" width="0.254" layer="94"/>
-<text x="-20.32" y="22.86" size="1.27" layer="125">&gt;NAME</text>
+<wire x1="0" y1="-7.62" x2="5.08" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="5.08" y1="-7.62" x2="5.08" y2="-3.81" width="0.254" layer="94"/>
+<wire x1="5.08" y1="-3.81" x2="5.08" y2="2.54" width="0.254" layer="94"/>
+<wire x1="5.08" y1="2.54" x2="5.08" y2="5.08" width="0.254" layer="94"/>
+<wire x1="5.08" y1="5.08" x2="-5.08" y2="5.08" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-2.54" x2="-2.54" y2="-3.81" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-3.81" x2="-2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-5.08" x2="0" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="0" y1="-5.08" x2="2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-3.81" x2="2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-3.81" x2="-2.54" y2="-3.81" width="0.254" layer="94"/>
+<wire x1="0" y1="-5.08" x2="0" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-5.08" x2="2.54" y2="-3.81" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-3.81" x2="5.08" y2="-3.81" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="2.54" x2="-1.524" y2="2.54" width="0.254" layer="94"/>
+<wire x1="5.08" y1="2.54" x2="1.524" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-1.524" y1="2.54" x2="0.254" y2="1.27" width="0.254" layer="94"/>
+<text x="-12.446" y="-2.032" size="1.778" layer="94">POTL</text>
+<text x="6.096" y="-2.032" size="1.778" layer="94">POTH</text>
+<text x="1.524" y="-10.414" size="1.778" layer="94">WIPER</text>
+<text x="-11.176" y="4.318" size="1.778" layer="94">SW0</text>
+<text x="5.842" y="4.318" size="1.778" layer="94">SW1</text>
 </symbol>
 <symbol name="MKL02Z32_QFN">
 <pin name="PTB5" x="12.7" y="2.54" length="short" rot="R180"/>
@@ -1045,6 +1082,27 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <pin name="PTB3" x="-12.7" y="-5.08" length="short"/>
 <pin name="PTB4" x="-12.7" y="-7.62" length="short"/>
 <pin name="PAD" x="0" y="-22.86" length="middle" rot="R90"/>
+</symbol>
+<symbol name="JACK">
+<pin name="GND" x="2.54" y="0" visible="pad" length="middle" rot="R180"/>
+<pin name="L" x="2.54" y="-2.54" visible="pad" length="middle" rot="R180"/>
+<pin name="R" x="2.54" y="7.62" visible="pad" length="middle" rot="R180"/>
+<wire x1="2.54" y1="-2.54" x2="-12.7" y2="-2.54" width="0.254" layer="94"/>
+<wire x1="-13.97" y1="1.27" x2="-13.97" y2="8.89" width="0.254" layer="94"/>
+<wire x1="-11.43" y1="8.89" x2="-11.43" y2="1.27" width="0.254" layer="94"/>
+<wire x1="-13.97" y1="8.89" x2="-11.43" y2="8.89" width="0.254" layer="94"/>
+<wire x1="2.54" y1="0" x2="-5.08" y2="0" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="0" x2="-6.35" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-6.35" y1="2.54" x2="-7.62" y2="0" width="0.254" layer="94"/>
+<wire x1="2.54" y1="7.62" x2="-6.35" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-6.35" y1="7.62" x2="-8.89" y2="3.81" width="0.254" layer="94"/>
+<wire x1="-8.89" y1="3.81" x2="-10.16" y2="6.35" width="0.254" layer="94"/>
+<wire x1="-13.97" y1="1.27" x2="-12.7" y2="1.27" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="1.27" x2="-11.43" y2="1.27" width="0.254" layer="94"/>
+<wire x1="-12.7" y1="-2.54" x2="-12.7" y2="1.27" width="0.254" layer="94"/>
+<text x="5.08" y="-3.302" size="1.778" layer="94">L</text>
+<text x="5.08" y="-0.762" size="1.778" layer="94">GND</text>
+<text x="4.826" y="6.858" size="1.778" layer="94">R</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -1221,6 +1279,16 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <attribute name="TYPE" value="Crystal" constant="no"/>
 <attribute name="VALUE" value="32.768kHz" constant="no"/>
 </technology>
+</technologies>
+</device>
+<device name="" package="CRYS">
+<connects>
+<connect gate="G$1" pin="1" pad="P$2"/>
+<connect gate="G$1" pin="2" pad="P$3"/>
+<connect gate="G$1" pin="GND" pad="P$1 P$4"/>
+</connects>
+<technologies>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -1608,6 +1676,23 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <connect gate="G$1" pin="PTB5" pad="13"/>
 <connect gate="G$1" pin="VDD" pad="1"/>
 <connect gate="G$1" pin="VSS" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="VERT_JACK">
+<gates>
+<gate name="G$1" symbol="JACK" x="5.08" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="AUDIOJACK">
+<connects>
+<connect gate="G$1" pin="GND" pad="G"/>
+<connect gate="G$1" pin="L" pad="L"/>
+<connect gate="G$1" pin="R" pad="R"/>
 </connects>
 <technologies>
 <technology name=""/>

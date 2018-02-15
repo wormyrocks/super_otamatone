@@ -1,8 +1,10 @@
 #include "MenuSystem.h"
 #include "Synth.h"
 #include "images.h"
+#include <Adafruit_SSD1306.h>
+
+Adafruit_SSD1306 oled(4);
 // pin values
-#define OLED_RESET 4 // unused
 #define POT_PIN 20 // neck potentiometer reading
 #define VOLUME_PIN 23 // volume potentiometer reading
 #define BUTTON_LEFT 22 // left button
@@ -37,33 +39,56 @@ AudioConnection patchCord1(waveform1, envelope1);
 AudioConnection patchCord2(envelope1, 0, mixer1, 0);
 AudioConnection patchCord3(mixer1, dac1);
 // GUItool: end automatically generated code
-Synth synth1(max_adc, & waveform1, & envelope1);
+Synth synth1(max_adc, & mixer1, & waveform1, & envelope1);
 IntervalTimer neck_read_int;
 IntervalTimer vol_read_int;
 Bounce debounce_1 = Bounce();
 Bounce debounce_2 = Bounce();
+
+#include "mymenu.h"
+
 void read_volume()
 {
 }
 
-void button_1_pressed()
-{
-  Serial.println("button 1 pressed");
+void button_1_pressed(){
+  if (edit_mode){
+    ms.back();
+    ms.display();
+  }
 }
 
-void button_1_released()
-{
-  Serial.println("button 1 released");
+void button_1_released(){
+  if (!edit_mode){
+    if (!synth1.playing){
+      synth1.change_octave(-1);
+      disp_update_non_menu();
+    }
+  }
 }
 
-void button_2_pressed()
-{
-  Serial.println("button 2 pressed");
+void button_2_pressed(){
+  if (edit_mode){
+    synth1.mute(true);
+    scrolling=true;
+    select_on_release=true;
+  }
 }
 
-void button_2_released()
-{
-  Serial.println("button 2 released");
+void button_2_released(){
+  if (edit_mode){
+    synth1.mute(false);
+    scrolling=false;
+    if (select_on_release){
+      ms.select();
+      ms.display();
+    }
+  }else{
+    if (!synth1.playing){
+      synth1.change_octave(1);
+      disp_update_non_menu();
+    }
+  }
 }
 
 void read_scale_neck()
@@ -90,11 +115,13 @@ void setup()
   {
     edit_mode = 1;
   }
+  oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  oled.clearDisplay();
   dac1.analogReference(INTERNAL);
   delay(50); // time for DAC voltage stable
-  pinMode(5, OUTPUT);
-  digitalWrite(5, HIGH); // turn on the amplifier
-  delay(10); // allow time to wake up
+  // pinMode(5, OUTPUT);
+  // digitalWrite(5, HIGH); // turn on the amplifier
+  // delay(10); // allow time to wake up
   debounce_1.attach(BUTTON_LEFT);
   debounce_2.attach(BUTTON_RIGHT);
   debounce_1.interval(5);
@@ -102,8 +129,19 @@ void setup()
   analogReadResolution(ADC_RES);
   neck_read_int.begin(read_scale_neck, POLL_NECK_MICROS);
   vol_read_int.begin(read_volume, POLL_VOLUME_MICROS);
-  mixer1.gain(1, 0.03);
   synth1.begin();
+  presets[0].en=true;
+  preset_menu_shown = presets[0].en;
+  populate_menus();
+  if (edit_mode){
+    ms.display();
+  }else{
+    oled.drawBitmap(0, 0, otamatone, 128, 64, 1);
+    oled.display();
+    delay(2000);
+    disp_setup();
+    disp_update_non_menu();
+  }
 }
 
 void loop()
