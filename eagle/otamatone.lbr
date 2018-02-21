@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.6.2">
+<eagle version="8.6.3">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="1" unitdist="mm" unit="mm" style="dots" multiple="1" display="yes" altdistance="0.1" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="yes" active="yes"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="yes" active="yes"/>
 <layer number="15" name="Route15" color="4" fill="6" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
@@ -413,6 +423,7 @@
 <package name="PTH_39MIL">
 <pad name="1" x="0" y="0" drill="0.9906"/>
 <circle x="0" y="0" radius="0.4472125" width="0.05" layer="51"/>
+<text x="-1" y="1" size="1.27" layer="21">&gt;NAME</text>
 </package>
 <package name="SOT-223">
 <description>&lt;b&gt;SMALL OUTLINE TRANSISTOR&lt;/b&gt;</description>
@@ -675,32 +686,23 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <rectangle x1="-0.9625" y1="1.2625" x2="-0.5375" y2="1.5125" layer="31" rot="R270"/>
 </package>
 <package name="AUDIOJACK">
-<smd name="G" x="0.9" y="4.4" dx="3.1" dy="1.3" layer="1"/>
-<smd name="R" x="0.9" y="-3.3" dx="3.1" dy="1.3" layer="1"/>
-<smd name="P$6" x="-3.5" y="-0.9" dx="2.5" dy="0.8" layer="1" rot="R90"/>
+<text x="-6" y="-1.45" size="1.27" layer="21">L</text>
+<text x="0.2" y="-6.25" size="1.27" layer="21">R</text>
+<text x="-1.05" y="6.3" size="1.27" layer="21">GND</text>
+<pad name="L" x="-3.456" y="-0.889" drill="2.5" diameter="3.5" rot="R90"/>
+<pad name="G" x="0.844" y="4.411" drill="2.5" diameter="3.5" rot="R90"/>
+<pad name="R" x="0.844" y="-3.289" drill="2.5" diameter="3.5" rot="R90"/>
 <wire x1="-4.5" y1="5.6" x2="4" y2="5.6" width="0.127" layer="21"/>
 <wire x1="4" y1="5.6" x2="4" y2="-4.5" width="0.127" layer="21"/>
 <wire x1="4" y1="-4.5" x2="-4.5" y2="-4.5" width="0.127" layer="21"/>
 <wire x1="-4.5" y1="-4.5" x2="-4.5" y2="5.6" width="0.127" layer="21"/>
-<smd name="L" x="-3.5" y="-0.9" dx="3.1" dy="1.3" layer="1" rot="R90"/>
-<wire x1="-3.9" y1="0.35" x2="-3.1" y2="0.35" width="0.127" layer="20"/>
-<wire x1="-3.1" y1="0.35" x2="-3.1" y2="-2.15" width="0.127" layer="20"/>
-<wire x1="-3.1" y1="-2.15" x2="-3.9" y2="-2.15" width="0.127" layer="20"/>
-<wire x1="-3.9" y1="-2.15" x2="-3.9" y2="0.35" width="0.127" layer="20"/>
-<wire x1="-0.35" y1="-2.9" x2="2.15" y2="-2.9" width="0.127" layer="20"/>
-<wire x1="2.15" y1="-2.9" x2="2.15" y2="-3.7" width="0.127" layer="20"/>
-<wire x1="2.15" y1="-3.7" x2="-0.35" y2="-3.7" width="0.127" layer="20"/>
-<wire x1="-0.35" y1="-3.7" x2="-0.35" y2="-2.9" width="0.127" layer="20"/>
-<wire x1="-0.35" y1="4.8" x2="-0.35" y2="4" width="0.127" layer="20"/>
-<wire x1="-0.35" y1="4" x2="2.15" y2="4" width="0.127" layer="20"/>
-<wire x1="2.15" y1="4" x2="2.15" y2="4.8" width="0.127" layer="20"/>
-<wire x1="2.15" y1="4.8" x2="-0.35" y2="4.8" width="0.127" layer="20"/>
-<text x="-6" y="-1.45" size="1.27" layer="20">L</text>
-<text x="0.2" y="-6.25" size="1.27" layer="20">R</text>
-<text x="-1.05" y="6.3" size="1.27" layer="20">GND</text>
-<smd name="L1" x="-3.5" y="-0.9" dx="3.1" dy="1.3" layer="16" rot="R90"/>
-<smd name="R1" x="0.9" y="-3.3" dx="3.1" dy="1.3" layer="16"/>
-<smd name="G1" x="0.9" y="4.4" dx="3.1" dy="1.3" layer="16"/>
+<wire x1="-4.5" y1="5.6" x2="4" y2="5.6" width="0.127" layer="21"/>
+<polygon width="0.127" layer="39">
+<vertex x="-4.5" y="5.6"/>
+<vertex x="4" y="5.6"/>
+<vertex x="4" y="-4.5"/>
+<vertex x="-4.5" y="-4.5"/>
+</polygon>
 </package>
 <package name="CRYS">
 <wire x1="0" y1="0" x2="0" y2="2.5" width="0.127" layer="21"/>
@@ -718,6 +720,60 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <vertex x="2.35" y="1.605"/>
 </polygon>
 <smd name="P$4" x="2.72" y="2" dx="0.75" dy="0.8" layer="1"/>
+</package>
+<package name="R0402">
+<description>&lt;b&gt;Chip RESISTOR 0402 EIA (1005 Metric)&lt;/b&gt;</description>
+<wire x1="-0.245" y1="0.224" x2="0.245" y2="0.224" width="0.1524" layer="51"/>
+<wire x1="0.245" y1="-0.224" x2="-0.245" y2="-0.224" width="0.1524" layer="51"/>
+<wire x1="-1" y1="0.483" x2="1" y2="0.483" width="0.0508" layer="39"/>
+<wire x1="1" y1="0.483" x2="1" y2="-0.483" width="0.0508" layer="39"/>
+<wire x1="1" y1="-0.483" x2="-1" y2="-0.483" width="0.0508" layer="39"/>
+<wire x1="-1" y1="-0.483" x2="-1" y2="0.483" width="0.0508" layer="39"/>
+<smd name="1" x="-0.5" y="0" dx="0.6" dy="0.7" layer="1"/>
+<smd name="2" x="0.5" y="0" dx="0.6" dy="0.7" layer="1"/>
+<text x="-0.635" y="0.635" size="1.27" layer="25">&gt;NAME</text>
+<text x="-0.635" y="-1.905" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-0.554" y1="-0.3048" x2="-0.254" y2="0.2951" layer="51"/>
+<rectangle x1="0.2588" y1="-0.3048" x2="0.5588" y2="0.2951" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.35" x2="0.1999" y2="0.35" layer="35"/>
+</package>
+<package name="C0402">
+<description>&lt;b&gt;CAPACITOR&lt;/b&gt;</description>
+<wire x1="-0.245" y1="0.224" x2="0.245" y2="0.224" width="0.1524" layer="51"/>
+<wire x1="0.245" y1="-0.224" x2="-0.245" y2="-0.224" width="0.1524" layer="51"/>
+<wire x1="-1.473" y1="0.483" x2="1.473" y2="0.483" width="0.0508" layer="39"/>
+<wire x1="1.473" y1="0.483" x2="1.473" y2="-0.483" width="0.0508" layer="39"/>
+<wire x1="1.473" y1="-0.483" x2="-1.473" y2="-0.483" width="0.0508" layer="39"/>
+<wire x1="-1.473" y1="-0.483" x2="-1.473" y2="0.483" width="0.0508" layer="39"/>
+<smd name="1" x="-0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
+<smd name="2" x="0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
+<text x="-0.635" y="0.635" size="1.27" layer="25">&gt;NAME</text>
+<text x="-0.635" y="-1.905" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-0.554" y1="-0.3048" x2="-0.254" y2="0.2951" layer="51"/>
+<rectangle x1="0.2588" y1="-0.3048" x2="0.5588" y2="0.2951" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
+</package>
+<package name="SMD">
+<smd name="P$1" x="0" y="0" dx="2" dy="2" layer="1" roundness="100"/>
+<text x="-1" y="1" size="1.27" layer="21">&gt;NAME</text>
+</package>
+<package name="SON65P210X210X80-7N">
+<smd name="1" x="-1.0414" y="0.6604" dx="0.6096" dy="0.3556" layer="1"/>
+<smd name="2" x="-1.0414" y="0" dx="0.6096" dy="0.3556" layer="1"/>
+<smd name="3" x="-1.0414" y="-0.6604" dx="0.6096" dy="0.3556" layer="1"/>
+<smd name="4" x="1.0414" y="-0.6604" dx="0.6096" dy="0.3556" layer="1"/>
+<smd name="5" x="1.0414" y="0" dx="0.6096" dy="0.3556" layer="1"/>
+<smd name="6" x="1.0414" y="0.6604" dx="0.6096" dy="0.3556" layer="1"/>
+<smd name="7" x="0" y="0" dx="0.9906" dy="1.6002" layer="1"/>
+<wire x1="-1.0414" y1="-1.0414" x2="1.0414" y2="-1.0414" width="0" layer="51"/>
+<wire x1="1.0414" y1="-1.0414" x2="1.0414" y2="1.0414" width="0" layer="51"/>
+<wire x1="1.0414" y1="1.0414" x2="0.3048" y2="1.0414" width="0" layer="51"/>
+<wire x1="0.3048" y1="1.0414" x2="-0.3048" y2="1.0414" width="0" layer="51"/>
+<wire x1="-0.3048" y1="1.0414" x2="-1.0414" y2="1.0414" width="0" layer="51"/>
+<wire x1="-1.0414" y1="1.0414" x2="-1.0414" y2="-1.0414" width="0" layer="51"/>
+<wire x1="0.3048" y1="1.0414" x2="-0.3048" y2="1.0414" width="0" layer="51" curve="-180"/>
+<text x="-3.4544" y="1.905" size="2.0828" layer="25" ratio="10" rot="SR0">&gt;NAME</text>
+<text x="-3.4544" y="-3.81" size="2.0828" layer="27" ratio="10" rot="SR0">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -1298,21 +1354,13 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <gate name="G$1" symbol="C" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="C0603">
+<device name="" package="C0402">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
 </connects>
 <technologies>
-<technology name="">
-<attribute name="DESC" value="0.1uF / 16VDC /  X7R " constant="no"/>
-<attribute name="MF" value="Murata Electronics" constant="no"/>
-<attribute name="MPN" value="GRM188R71C104KA01D" constant="no"/>
-<attribute name="OC_MOUSER" value="81-GRM39X104K16" constant="no"/>
-<attribute name="PACKAGE" value="0603" constant="no"/>
-<attribute name="TYPE" value="Capacitor" constant="no"/>
-<attribute name="VALUE" value="0.1uF"/>
-</technology>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -1322,21 +1370,13 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <gate name="G$1" symbol="C" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="C0805">
+<device name="" package="C0603">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
 </connects>
 <technologies>
-<technology name="">
-<attribute name="DESC" value="2.2uF / 25 VDC / X7R " constant="no"/>
-<attribute name="MF" value="Taiyo Yuden" constant="no"/>
-<attribute name="MPN" value="TMK212B7225KG-TR" constant="no"/>
-<attribute name="OC_MOUSER" value="963-TMK212B7225KG-TR" constant="no"/>
-<attribute name="PACKAGE" value="0805" constant="no"/>
-<attribute name="TYPE" value="Capacitor" constant="no"/>
-<attribute name="VALUE" value="2.2uF"/>
-</technology>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -1346,21 +1386,13 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <gate name="G$1" symbol="RES" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="R0603">
+<device name="" package="R0402">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
 </connects>
 <technologies>
-<technology name="">
-<attribute name="DESC" value="33R / 1% / 0.25 W" constant="no"/>
-<attribute name="MF" value="Panasonic" constant="no"/>
-<attribute name="MPN" value="ERJ-PA3F33R0V" constant="no"/>
-<attribute name="OC_MOUSER" value="667-ERJ-PA3F33R0V" constant="no"/>
-<attribute name="PACKAGE" value="0603" constant="no"/>
-<attribute name="TYPE" value="Resistor" constant="no"/>
-<attribute name="VALUE" value="33R"/>
-</technology>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -1370,21 +1402,13 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <gate name="G$1" symbol="RES" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="R0603">
+<device name="" package="R0402">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
 </connects>
 <technologies>
-<technology name="">
-<attribute name="DESC" value="470R / 1 % /  0.1 W" constant="no"/>
-<attribute name="MF" value="Vishay" constant="no"/>
-<attribute name="MPN" value="CRCW0603470RFKEA" constant="no"/>
-<attribute name="OC_MOUSER" value="71-CRCW0603-470-E3" constant="no"/>
-<attribute name="PACKAGE" value="0603" constant="no"/>
-<attribute name="TYPE" value="Resistor" constant="no"/>
-<attribute name="VALUE" value="470R"/>
-</technology>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -1394,21 +1418,13 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <gate name="G$1" symbol="C" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="C0603">
+<device name="" package="C0402">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
 </connects>
 <technologies>
-<technology name="">
-<attribute name="DESC" value="22pF / 50VDC / C0G (NP0)" constant="no"/>
-<attribute name="MF" value="Vishay / Vitramon" constant="no"/>
-<attribute name="MPN" value="VJ0603A220JXACW1BC" constant="no"/>
-<attribute name="OC_MOUSER" value="77-VJ0603A220JXACBC" constant="no"/>
-<attribute name="PACKAGE" value="0603" constant="no"/>
-<attribute name="TYPE" value="Capacitor" constant="no"/>
-<attribute name="VALUE" value="22pF"/>
-</technology>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -1470,6 +1486,14 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <device name="" package="PTH_39MIL">
 <connects>
 <connect gate="G$1" pin="P$1" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="SMT" package="SMD">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -1693,6 +1717,24 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <connect gate="G$1" pin="GND" pad="G"/>
 <connect gate="G$1" pin="L" pad="L"/>
 <connect gate="G$1" pin="R" pad="R"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="LP38691">
+<gates>
+<gate name="G$1" symbol="LDO" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SON65P210X210X80-7N">
+<connects>
+<connect gate="G$1" pin="GND" pad="2"/>
+<connect gate="G$1" pin="IN" pad="1 6"/>
+<connect gate="G$1" pin="OUT" pad="4 5"/>
+<connect gate="G$1" pin="PAD" pad="7"/>
 </connects>
 <technologies>
 <technology name=""/>
