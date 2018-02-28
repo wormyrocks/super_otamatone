@@ -4,3 +4,5 @@ arduino/otamatone/build-teensy31
 arduino/otamatone/build-teensy31/*
 arduino/otamatone/tyc
 arduino/otamatone/*.inot
+arduino/otamatone/*.hex
+eagle/otamatone.*#*

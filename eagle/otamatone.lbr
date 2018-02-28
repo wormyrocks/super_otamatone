@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="50" unitdist="mil" unit="mm" style="lines" multiple="1" display="no" altdistance="0.1" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
@@ -609,8 +609,8 @@
 </package>
 <package name="5PIN_POT">
 <circle x="0" y="0" radius="8.898128125" width="0.127" layer="20"/>
-<smd name="1" x="10.3" y="0" dx="3" dy="4" layer="16" roundness="100"/>
-<smd name="0" x="-10.3" y="0" dx="3" dy="4.5" layer="16" roundness="100"/>
+<smd name="1" x="10.554" y="0" dx="2.5" dy="4.5" layer="16" roundness="100"/>
+<smd name="0" x="-10.554" y="0" dx="2.5" dy="4.5" layer="16" roundness="100"/>
 <smd name="3" x="0" y="-12" dx="3" dy="3" layer="16" roundness="100"/>
 <smd name="4" x="6" y="-10.3" dx="3" dy="3" layer="16" roundness="100"/>
 <smd name="2" x="-6" y="-10.3" dx="3" dy="3" layer="16" roundness="100"/>
@@ -712,14 +712,8 @@ Source: www.hittite.com .. hmc492lp3.pdf</description>
 <smd name="P$1" x="0.6" y="0.5" dx="1" dy="0.8" layer="1"/>
 <smd name="P$2" x="2.6" y="0.5" dx="1" dy="0.8" layer="1"/>
 <smd name="P$3" x="0.6" y="2" dx="1" dy="0.8" layer="1"/>
-<polygon width="0.01" layer="1">
-<vertex x="2.104" y="1.883"/>
-<vertex x="2.104" y="2.394"/>
-<vertex x="3.095" y="2.394"/>
-<vertex x="3.095" y="1.605"/>
-<vertex x="2.35" y="1.605"/>
-</polygon>
-<smd name="P$4" x="2.72" y="2" dx="0.75" dy="0.8" layer="1"/>
+<smd name="P$4" x="2.593" y="2" dx="1" dy="0.8" layer="1"/>
+<circle x="3.556" y="2.794" radius="0.179603125" width="0.127" layer="21"/>
 </package>
 <package name="R0402">
 <description>&lt;b&gt;Chip RESISTOR 0402 EIA (1005 Metric)&lt;/b&gt;</description>
