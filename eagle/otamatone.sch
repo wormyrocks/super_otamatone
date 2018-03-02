@@ -8432,22 +8432,6 @@ Source: http://www.taiwansemi.com .. 5205_0409c.pdf</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="CAPACITOR-22PF" prefix="C" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="C" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="C0402">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
 <deviceset name="PIN" prefix="SX">
 <gates>
 <gate name="G$1" symbol="PIN" x="0" y="0"/>
@@ -9447,10 +9431,6 @@ Source: &lt;a href="http://www.farnell.com/datasheets/391100.pdf"&gt; Data sheet
 <part name="R5" library="otamatone" deviceset="RESISTOR-33R" device="" value="33R"/>
 <part name="R3" library="otamatone" deviceset="RESISTOR-470R" device="" value="470R"/>
 <part name="R6" library="otamatone" deviceset="RESISTOR-33R" device="" value="33R"/>
-<part name="C10" library="otamatone" deviceset="CAPACITOR-22PF" device="" value="22pF"/>
-<part name="C11" library="otamatone" deviceset="CAPACITOR-22PF" device="" value="22pF"/>
-<part name="GND13" library="t32_ref" deviceset="GND" device=""/>
-<part name="GND12" library="t32_ref" deviceset="GND" device=""/>
 <part name="R4" library="otamatone" deviceset="FERRITE" device=""/>
 <part name="R2" library="otamatone" deviceset="FERRITE" device=""/>
 <part name="GND8" library="t32_ref" deviceset="GND" device=""/>
@@ -9485,9 +9465,6 @@ Source: &lt;a href="http://www.farnell.com/datasheets/391100.pdf"&gt; Data sheet
 <part name="U$4" library="otamatone" deviceset="VERT_JACK" device=""/>
 <part name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="TLLR4400" device="" package3d_urn="urn:adsk.eagle:package:15797/1"/>
 <part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
-<part name="SX2" library="otamatone" deviceset="PIN" device="SMT"/>
-<part name="SX5" library="otamatone" deviceset="PIN" device="SMT"/>
-<part name="BTN_GND" library="otamatone" deviceset="PIN" device="SMT"/>
 <part name="R14" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10K"/>
 <part name="R15" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-US_" device="R0402" package3d_urn="urn:adsk.eagle:package:23547/2" value="10K"/>
 <part name="GND15" library="t32_ref" deviceset="GND" device=""/>
@@ -9507,6 +9484,10 @@ Source: &lt;a href="http://www.farnell.com/datasheets/391100.pdf"&gt; Data sheet
 <part name="GND2" library="t32_ref" deviceset="GND" device=""/>
 <part name="Z+" library="otamatone" deviceset="PIN" device="SMT"/>
 <part name="G1" library="otamatone" deviceset="CRYSTAL-" device=""/>
+<part name="SX1" library="otamatone" deviceset="PIN" device=""/>
+<part name="SX3" library="otamatone" deviceset="PIN" device=""/>
+<part name="SX2" library="otamatone" deviceset="PIN" device=""/>
+<part name="SX4" library="otamatone" deviceset="PIN" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9555,10 +9536,6 @@ change LDO regulator</text>
 <instance part="R5" gate="G$1" x="83.82" y="109.22"/>
 <instance part="R3" gate="G$1" x="83.82" y="124.46"/>
 <instance part="R6" gate="G$1" x="83.82" y="104.14"/>
-<instance part="C10" gate="G$1" x="78.74" y="86.36"/>
-<instance part="C11" gate="G$1" x="88.9" y="86.36"/>
-<instance part="GND13" gate="1" x="88.9" y="83.82"/>
-<instance part="GND12" gate="1" x="78.74" y="83.82"/>
 <instance part="R4" gate="G$1" x="63.5" y="114.3"/>
 <instance part="R2" gate="G$1" x="73.66" y="142.24" smashed="yes" rot="R90">
 <attribute name="NAME" x="74.168" y="141.478" size="1.778" layer="95" ratio="10"/>
@@ -9608,16 +9585,13 @@ change LDO regulator</text>
 <instance part="U$4" gate="G$1" x="203.2" y="17.78"/>
 <instance part="LED1" gate="G$1" x="170.18" y="25.4"/>
 <instance part="R8" gate="G$1" x="170.18" y="12.7" rot="R90"/>
-<instance part="SX2" gate="G$1" x="175.26" y="147.32"/>
-<instance part="SX5" gate="G$1" x="175.26" y="149.86"/>
-<instance part="BTN_GND" gate="G$1" x="170.18" y="160.02"/>
 <instance part="R14" gate="G$1" x="160.02" y="154.94" smashed="yes" rot="R90">
 <attribute name="NAME" x="161.29" y="153.924" size="1.778" layer="95" ratio="10"/>
 </instance>
 <instance part="R15" gate="G$1" x="167.64" y="152.4" smashed="yes" rot="R90">
 <attribute name="NAME" x="168.91" y="151.384" size="1.778" layer="95" ratio="10"/>
 </instance>
-<instance part="GND15" gate="1" x="154.94" y="157.48"/>
+<instance part="GND15" gate="1" x="177.8" y="154.94"/>
 <instance part="B-" gate="G$1" x="220.98" y="182.88"/>
 <instance part="GND1" gate="1" x="73.66" y="157.48"/>
 <instance part="GND18" gate="1" x="215.9" y="180.34"/>
@@ -9634,6 +9608,10 @@ change LDO regulator</text>
 <instance part="GND2" gate="1" x="99.06" y="157.48"/>
 <instance part="Z+" gate="G$1" x="119.38" y="167.64"/>
 <instance part="G1" gate="G$1" x="96.52" y="96.52" rot="R270"/>
+<instance part="SX1" gate="G$1" x="182.88" y="154.94"/>
+<instance part="SX3" gate="G$1" x="182.88" y="157.48"/>
+<instance part="SX2" gate="G$1" x="175.26" y="149.86"/>
+<instance part="SX4" gate="G$1" x="175.26" y="147.32"/>
 </instances>
 <busses>
 </busses>
@@ -9689,16 +9667,6 @@ change LDO regulator</text>
 <wire x1="88.9" y1="144.78" x2="88.9" y2="143.51" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C11" gate="G$1" pin="2"/>
-<pinref part="GND13" gate="1" pin="GND"/>
-<wire x1="88.9" y1="83.82" x2="88.9" y2="85.09" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="C10" gate="G$1" pin="2"/>
-<pinref part="GND12" gate="1" pin="GND"/>
-<wire x1="78.74" y1="85.09" x2="78.74" y2="83.82" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="R4" gate="G$1" pin="1"/>
 <wire x1="60.96" y1="114.3" x2="55.88" y2="114.3" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="114.3" x2="55.88" y2="113.03" width="0.1524" layer="91"/>
@@ -9746,18 +9714,6 @@ change LDO regulator</text>
 <pinref part="G1" gate="G$1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="GND15" gate="1" pin="GND"/>
-<pinref part="R14" gate="G$1" pin="2"/>
-<wire x1="154.94" y1="158.75" x2="154.94" y2="160.02" width="0.1524" layer="91"/>
-<wire x1="154.94" y1="160.02" x2="160.02" y2="160.02" width="0.1524" layer="91"/>
-<pinref part="R15" gate="G$1" pin="2"/>
-<wire x1="160.02" y1="160.02" x2="167.64" y2="160.02" width="0.1524" layer="91"/>
-<wire x1="167.64" y1="160.02" x2="167.64" y2="157.48" width="0.1524" layer="91"/>
-<junction x="160.02" y="160.02"/>
-<pinref part="BTN_GND" gate="G$1" pin="P$1"/>
-<junction x="167.64" y="160.02"/>
-</segment>
-<segment>
 <pinref part="GND1" gate="1" pin="GND"/>
 <wire x1="73.66" y1="158.75" x2="73.66" y2="162.56" width="0.1524" layer="91"/>
 <pinref part="C1" gate="G$1" pin="2"/>
@@ -9792,16 +9748,21 @@ change LDO regulator</text>
 <pinref part="C2" gate="G$1" pin="2"/>
 <wire x1="99.06" y1="158.75" x2="99.06" y2="160.02" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="SX1" gate="G$1" pin="P$1"/>
+<pinref part="SX3" gate="G$1" pin="P$1"/>
+<wire x1="180.34" y1="154.94" x2="180.34" y2="157.48" width="0.1524" layer="91"/>
+<pinref part="GND15" gate="1" pin="GND"/>
+<wire x1="177.8" y1="156.21" x2="180.34" y2="156.21" width="0.1524" layer="91"/>
+<wire x1="180.34" y1="156.21" x2="180.34" y2="157.48" width="0.1524" layer="91"/>
+<junction x="180.34" y="157.48"/>
+</segment>
 </net>
 <net name="N$5" class="0">
 <segment>
 <pinref part="K1" gate="G$1" pin="PTA18"/>
-<pinref part="C10" gate="G$1" pin="1"/>
 <wire x1="114.3" y1="99.06" x2="96.52" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="99.06" x2="78.74" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="78.74" y1="99.06" x2="78.74" y2="88.9" width="0.1524" layer="91"/>
 <pinref part="G1" gate="G$1" pin="1"/>
-<junction x="96.52" y="99.06"/>
 </segment>
 </net>
 <net name="N$6" class="0">
@@ -9809,10 +9770,6 @@ change LDO regulator</text>
 <pinref part="K1" gate="G$1" pin="PTA19"/>
 <wire x1="114.3" y1="91.44" x2="96.52" y2="91.44" width="0.1524" layer="91"/>
 <wire x1="96.52" y1="91.44" x2="96.52" y2="93.98" width="0.1524" layer="91"/>
-<pinref part="C11" gate="G$1" pin="1"/>
-<wire x1="96.52" y1="91.44" x2="88.9" y2="91.44" width="0.1524" layer="91"/>
-<wire x1="88.9" y1="91.44" x2="88.9" y2="88.9" width="0.1524" layer="91"/>
-<junction x="96.52" y="91.44"/>
 <pinref part="G1" gate="G$1" pin="2"/>
 </segment>
 </net>
@@ -10032,6 +9989,15 @@ change LDO regulator</text>
 <wire x1="208.28" y1="91.44" x2="208.28" y2="86.36" width="0.1524" layer="91"/>
 <label x="203.2" y="91.44" size="1.778" layer="95"/>
 <pinref part="IC1" gate="G$1" pin="VCC"/>
+</segment>
+<segment>
+<pinref part="R14" gate="G$1" pin="2"/>
+<wire x1="154.94" y1="160.02" x2="160.02" y2="160.02" width="0.1524" layer="91"/>
+<pinref part="R15" gate="G$1" pin="2"/>
+<wire x1="160.02" y1="160.02" x2="167.64" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="167.64" y1="160.02" x2="167.64" y2="157.48" width="0.1524" layer="91"/>
+<junction x="160.02" y="160.02"/>
+<label x="154.94" y="160.02" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$52" class="0">
@@ -10266,24 +10232,24 @@ change LDO regulator</text>
 </net>
 <net name="LBUTTON" class="0">
 <segment>
-<pinref part="SX5" gate="G$1" pin="P$1"/>
 <pinref part="K1" gate="G$1" pin="PTC1"/>
 <wire x1="172.72" y1="149.86" x2="160.02" y2="149.86" width="0.1524" layer="91"/>
 <label x="177.8" y="149.86" size="1.778" layer="95"/>
 <pinref part="R14" gate="G$1" pin="1"/>
 <wire x1="160.02" y1="149.86" x2="154.94" y2="149.86" width="0.1524" layer="91"/>
 <junction x="160.02" y="149.86"/>
+<pinref part="SX2" gate="G$1" pin="P$1"/>
 </segment>
 </net>
 <net name="RBUTTON" class="0">
 <segment>
 <pinref part="K1" gate="G$1" pin="PTD6"/>
-<pinref part="SX2" gate="G$1" pin="P$1"/>
 <wire x1="154.94" y1="147.32" x2="167.64" y2="147.32" width="0.1524" layer="91"/>
 <label x="177.8" y="147.32" size="1.778" layer="95"/>
 <pinref part="R15" gate="G$1" pin="1"/>
 <wire x1="167.64" y1="147.32" x2="172.72" y2="147.32" width="0.1524" layer="91"/>
 <junction x="167.64" y="147.32"/>
+<pinref part="SX4" gate="G$1" pin="P$1"/>
 </segment>
 </net>
 <net name="VBAT" class="0">
