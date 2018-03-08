@@ -1,15 +1,15 @@
 /*
- * Copyright (c) 2015, 2016 arduino-menusystem
- * Licensed under the MIT license (see LICENSE)
- */
+   Copyright (c) 2015, 2016 arduino-menusystem
+   Licensed under the MIT license (see LICENSE)
+*/
 
 #ifndef MENUSYSTEM_H
 #define MENUSYSTEM_H
 
 #if defined(ARDUINO) && ARDUINO >= 100
-  #include <Arduino.h>
+#include <Arduino.h>
 #else
-  #include <WProgram.h>
+#include <WProgram.h>
 #endif
 
 class Menu;
@@ -33,7 +33,7 @@ class MenuComponent
 {
     friend class MenuSystem;
     friend class Menu;
-public:
+  public:
     //! \brief Construct a MenuComponent
     //! \param[in] name The name of the menu component that is displayed in
     //!                 clients.
@@ -90,7 +90,7 @@ public:
     //! \see MenuComponent::set_current
     bool is_current() const;
 
-protected:
+  protected:
     //! \brief Processes the next action
     //!
     //! The behaviour of this function can differ depending on whether
@@ -107,7 +107,7 @@ protected:
     //!
     //! \see MenuComponent::prev
     //! \see MenuComponent::has_focus
-    virtual bool next(bool loop=false) = 0;
+    virtual bool next(bool loop = false) = 0;
 
     //! \brief Processes the prev action
     //!
@@ -125,7 +125,7 @@ protected:
     //!
     //! \see MenuComponent::next
     //! \see MenuComponent::has_focus
-    virtual bool prev(bool loop=false) = 0;
+    virtual bool prev(bool loop = false) = 0;
 
     //! \brief Resets the component to its initial state
     virtual void reset() = 0;
@@ -153,9 +153,9 @@ protected:
     //! \paran is_current true if this component is the current one; false
     //!                   otherwise.
     //! \see is_current
-    void set_current(bool is_current=true);
+    void set_current(bool is_current = true);
 
-protected:
+  protected:
     const char* _name;
     bool _has_focus;
     bool _is_current;
@@ -172,13 +172,13 @@ protected:
 //! \see Menu
 class MenuItem : public MenuComponent
 {
-public:
+  public:
     //! \brief Callback for when the MenuItem is selected
     //!
     //! \param menu_item The menu item being selected.
     using SelectFnPtr = void (*)(MenuItem* menu_item);
 
-public:
+  public:
     //! \brief Construct a MenuItem
     //! \param[in] name The name of the menu component that is displayed in
     //!                 clients.
@@ -194,16 +194,16 @@ public:
     //! \copydoc MenuComponent::render
     virtual void render(MenuComponentRenderer const& renderer) const;
 
-protected:
+  protected:
     //! \copydoc MenuComponent::next
     //!
     //! This method does nothing in MenyItem.
-    virtual bool next(bool loop=false);
+    virtual bool next(bool loop = false);
 
     //! \copydoc MenuComponent::prev
     //!
     //! This method does nothing in MenuItem.
-    virtual bool prev(bool loop=false);
+    virtual bool prev(bool loop = false);
 
     //! \copydoc MenuComponent::reset
     //!
@@ -213,7 +213,7 @@ protected:
     //! \copydoc MenuComponent:select
     virtual Menu* select();
 
-protected:
+  protected:
     SelectFnPtr _select_fn;
 };
 
@@ -221,29 +221,29 @@ protected:
 //! \see MenuItem
 class BackMenuItem : public MenuItem
 {
-public:
+  public:
     BackMenuItem(const char* name, SelectFnPtr select_fn, MenuSystem* ms);
 
     virtual void render(MenuComponentRenderer const& renderer) const;
 
-protected:
+  protected:
     virtual Menu* select();
 
-protected:
+  protected:
     MenuSystem* menu_system;
 };
 
 
 class NumericMenuItem : public MenuItem
 {
-public:
+  public:
     //! \brief Callback for formatting the numeric value into a String.
     //!
     //! \param value The value to convert.
     //! \returns The String representation of value.
     using FormatValueFnPtr = const String (*)(const float value);
 
-public:
+  public:
     /// Constructor
     ///
     /// @param name The name of the menu item.
@@ -256,15 +256,15 @@ public:
     ///                       formatter will be used.
     NumericMenuItem(const char* name, SelectFnPtr select_fn,
                     float value, float minValue, float maxValue,
-                    float increment=1.0,
-                    FormatValueFnPtr format_value_fn=nullptr);
+                    float increment = 1.0,
+                    FormatValueFnPtr format_value_fn = nullptr);
 
     /**
-     * Sets the custom number formatter.
-     *
-     * @param numberFormat the custom formatter. If nullptr the String float
-     *                     formatter will be used (2 decimals)
-     */
+       Sets the custom number formatter.
+
+       @param numberFormat the custom formatter. If nullptr the String float
+                           formatter will be used (2 decimals)
+    */
     void set_number_formatter(FormatValueFnPtr format_value_fn);
 
     float get_value() const;
@@ -279,13 +279,13 @@ public:
 
     virtual void render(MenuComponentRenderer const& renderer) const;
 
-protected:
-    virtual bool next(bool loop=false);
-    virtual bool prev(bool loop=false);
+  protected:
+    virtual bool next(bool loop = false);
+    virtual bool prev(bool loop = false);
 
     virtual Menu* select();
 
-protected:
+  protected:
     float _value;
     float _minValue;
     float _maxValue;
@@ -297,7 +297,7 @@ protected:
 class Menu : public MenuComponent
 {
     friend class MenuSystem;
-public:
+  public:
     using SelectFnPtr = void (*)(Menu *menu);
 
     Menu(const char* name);
@@ -310,25 +310,25 @@ public:
     MenuComponent const* get_current_component() const;
     MenuComponent const* get_menu_component(uint8_t index) const;
 
-    uint8_t get_num_components() const;
-    uint8_t get_current_component_num() const;
-    uint8_t get_previous_component_num() const;
+    virtual uint8_t get_num_components() const;
+    virtual uint8_t get_current_component_num() const;
+    virtual uint8_t get_previous_component_num() const;
 
     virtual void render(MenuComponentRenderer const& renderer) const;
     virtual void fs_render(MenuComponentRenderer const& renderer) const;
-protected:
+  protected:
     void set_parent(Menu* pParent);
     Menu const* get_parent() const;
 
     Menu* activate();
-    virtual bool next(bool loop=false);
-    virtual bool prev(bool loop=false);
+    virtual bool next(bool loop = false);
+    virtual bool prev(bool loop = false);
     virtual Menu* select();
     virtual void reset();
-    void set_select_function(SelectFnPtr select_fn); 
+    void set_select_function(SelectFnPtr select_fn);
     SelectFnPtr _select_fn;
 
-private:
+  private:
     MenuComponent* _p_current_component;
     MenuComponent** _menu_components;
     Menu* _p_parent;
@@ -339,55 +339,58 @@ private:
 
 class BigNumberSlider : public Menu
 {
-public:
+  public:
 
     BigNumberSlider(const char* name,
-                                 uint8_t value, uint8_t minValue, uint8_t maxValue,
-                                 uint8_t increment, uint8_t animation, SelectFnPtr select_fn);
+                    uint8_t value, uint8_t minValue, uint8_t maxValue,
+                    uint8_t increment, uint8_t animation, SelectFnPtr select_fn);
 
 
     uint8_t get_value() const;
     uint8_t get_minValue() const;
     uint8_t get_maxValue() const;
     uint8_t get_animation() const;
-    
+    uint8_t get_num_components() const;
+    uint8_t get_current_component_num() const;
+
     void set_value(uint8_t value);
     void set_min_value(uint8_t value);
     void set_max_value(uint8_t value);
     virtual void render(MenuComponentRenderer const& renderer) const;
     virtual void fs_render(MenuComponentRenderer const& renderer) const;
 
-protected:
-    virtual bool next(bool loop=false);
-    virtual bool prev(bool loop=false);
+  protected:
+    virtual bool next(bool loop = false);
+    virtual bool prev(bool loop = false);
     virtual Menu* select();
 
-protected:
+  private:
     uint8_t _value;
     uint8_t _animation;
     uint8_t _minValue;
     uint8_t _maxValue;
     uint8_t _increment;
+    uint8_t _slider_divs;
 
 };
 
 
 class MenuSystem
 {
-public:
+  public:
     MenuSystem(MenuComponentRenderer const& renderer);
 
     void display() const;
-    bool next(bool loop=false);
-    bool prev(bool loop=false);
+    bool next(bool loop = false);
+    bool prev(bool loop = false);
     void reset();
-    void select(bool reset=false);
+    void select(bool reset = false);
     bool back();
 
     Menu& get_root_menu() const;
     Menu const* get_current_menu() const;
 
-private:
+  private:
     Menu* _p_root_menu;
     Menu* _p_curr_menu;
     MenuComponentRenderer const& _renderer;
@@ -396,7 +399,7 @@ private:
 
 class MenuComponentRenderer
 {
-public:
+  public:
     virtual void render(Menu const& menu) const = 0;
     virtual void render_menu_item(MenuItem const& menu_item) const = 0;
     virtual void render_back_menu_item(BackMenuItem const& menu_item) const = 0;

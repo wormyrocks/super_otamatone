@@ -2,7 +2,6 @@
 #include "Synth.h"
 #include "images.h"
 #include <Adafruit_SSD1306.h>
-
 Adafruit_SSD1306 oled(4);
 // pin values
 #define POT_PIN 20 // neck potentiometer reading
@@ -44,47 +43,57 @@ IntervalTimer neck_read_int;
 IntervalTimer vol_read_int;
 Bounce debounce_1 = Bounce();
 Bounce debounce_2 = Bounce();
-
 #include "mymenu.h"
-
 void read_volume()
 {
 }
 
-void button_1_pressed(){
-  if (edit_mode){
-    ms.back();
+void button_1_pressed()
+{
+  if (edit_mode)
+  {
     ms.display();
   }
 }
 
-void button_1_released(){
-  if (!edit_mode){
-    if (!synth1.playing){
+void button_1_released()
+{
+  if (!edit_mode)
+  {
+    if (!synth1.playing)
+    {
       synth1.change_octave(-1);
       disp_update_non_menu();
     }
   }
 }
 
-void button_2_pressed(){
-  if (edit_mode){
+void button_2_pressed()
+{
+  if (edit_mode)
+  {
     synth1.mute(true);
-    scrolling=true;
-    select_on_release=true;
+    scrolling = true;
+    select_on_release = true;
   }
 }
 
-void button_2_released(){
-  if (edit_mode){
+void button_2_released()
+{
+  if (edit_mode)
+  {
     synth1.mute(false);
-    scrolling=false;
-    if (select_on_release){
+    scrolling = false;
+    if (select_on_release)
+    {
       ms.select();
       ms.display();
     }
-  }else{
-    if (!synth1.playing){
+  }
+  else
+  {
+    if (!synth1.playing)
+    {
       synth1.change_octave(1);
       disp_update_non_menu();
     }
@@ -106,12 +115,12 @@ void read_scale_neck()
 void setup()
 {
   AudioMemory(18);
-  pinMode(BUTTON_LEFT, INPUT_PULLDOWN);
-  pinMode(BUTTON_RIGHT, INPUT_PULLDOWN);
+  pinMode(BUTTON_LEFT, INPUT);
+  pinMode(BUTTON_RIGHT, INPUT);
   pinMode(POT_PIN, INPUT);
   pinMode(VOLUME_PIN, INPUT);
   // enter edit mode if both buttons are down at startup
-  if (digitalRead(BUTTON_LEFT) == 1 && digitalRead(BUTTON_RIGHT) == 1)
+  if (digitalRead(BUTTON_LEFT) == 0 && digitalRead(BUTTON_RIGHT) == 0)
   {
     edit_mode = 1;
   }
@@ -130,12 +139,15 @@ void setup()
   neck_read_int.begin(read_scale_neck, POLL_NECK_MICROS);
   vol_read_int.begin(read_volume, POLL_VOLUME_MICROS);
   synth1.begin();
-  presets[0].en=true;
+  presets[0].en = true;
   preset_menu_shown = presets[0].en;
   populate_menus();
-  if (edit_mode){
+  if (edit_mode)
+  {
     ms.display();
-  }else{
+  }
+  else
+  {
     oled.drawBitmap(0, 0, otamatone, 128, 64, 1);
     oled.display();
     delay(2000);
@@ -155,15 +167,16 @@ void loop()
   synth1.update(pot_val);
   // if (synth1.playing) Serial.println(synth1.get_freq());
   if (debounce_1.risingEdge())
-    button_1_pressed();
+    button_1_released();
   else
     if (debounce_1.fallingEdge())
-      button_1_released();
+      button_1_pressed();
   if (debounce_2.risingEdge())
-    button_2_pressed();
+    button_2_released();
   else
     if (debounce_2.fallingEdge())
-      button_2_released();
+      button_2_pressed();
+  update_menu();
   while (millis() - dt < EVENT_LOOP_DT)
   {
   }

@@ -196,8 +196,8 @@ void update_bignumber_preset(Menu * p_menu);
 void update_preset_menu();
 void preset_en(MenuItem * p_menu_item);
 Menu edit_preset("Edit Preset");
-BigNumberSlider preset_no("Editing Preset", 0, 0, MAX_NUM_PRESETS - 1, 1, 0, & update_bignumber_preset);
-MenuItem enable_preset("Preset Enabled", & preset_en);
+BigNumberSlider preset_no("Editing Preset", 0, 0, MAX_NUM_PRESETS - 1, 1, 1, & update_bignumber_preset);
+MenuItem enable_preset("Disable Preset", & preset_en);
 Menu env_edit("Edit Chain");
 Menu eff_edit("Edit Effects");
 // MenuItem eff_0("New Effect", NULL);
@@ -246,7 +246,7 @@ void update_preset_menu()
     preset_menu_shown? edit_preset.show_n_items(2):edit_preset.hide_n_items(2);
   }
   // preset_no.set_isnew(presets[cur_preset].en);
-  enable_preset.set_name(preset_menu_shown? "Preset Enabled":"Enable Preset");
+  enable_preset.set_name(preset_menu_shown? "Disable Preset":"Enable Preset");
 }
 
 void preset_en(MenuItem * p_menu_item)
@@ -261,7 +261,7 @@ void disp_setup(){
 }
 
 void disp_update_non_menu(){
-  uint16_t octave = synth1.get_octave();
+  int octave = synth1.get_octave();
   oled.clearDisplay();
   oled.setCursor(0,0);
   oled.print("Octave: ");
@@ -271,11 +271,31 @@ void disp_update_non_menu(){
 }
 
 void populate_menus(){
-  ms.get_root_menu().set_name("Patch Editor");
-  ms.get_root_menu().add_menu(&edit_preset);
-  ms.get_root_menu().add_menu(&main_settings);
+  Menu &root = ms.get_root_menu();
+  root.set_name("Patch Editor");
+  root.add_menu(&edit_preset);
+  root.add_menu(&main_settings);
   edit_preset.add_menu(&preset_no);
   edit_preset.add_item(&enable_preset);
   edit_preset.add_menu(&env_edit);
   edit_preset.add_menu(&eff_edit);
 }
+
+void update_menu()
+{
+  if (scrolling){
+    if (pot_val != 0){
+      Menu const* m = ms.get_current_menu();
+      int index = (max_adc-pot_val) * m->get_num_components() / max_adc;
+      if (index > m->get_current_component_num()){
+        ms.next();
+        ms.display();
+      }else if (index < m->get_current_component_num()){
+        ms.prev();
+        ms.display();
+      }
+      select_on_release = false;
+    }
+  }
+}
+

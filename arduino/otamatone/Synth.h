@@ -21,13 +21,13 @@ class Synth{
 public:
 	Synth(uint16_t _max_adc, AudioMixer4 *_mixer1, AudioSynthWaveform *_waveform1, AudioEffectEnvelope *_envelope1);
 	void update(uint16_t sample);
-	void change_octave(uint8_t _oct);
+	void change_octave(int _oct);
 	void toggle_oto_tune();
 	void begin();
 	void stop();
 	void mute(bool do_mute);
 	uint16_t get_freq();
-	uint16_t get_octave();
+	int get_octave();
 
 	//whether the note is currently playing 
 	bool playing;
@@ -79,7 +79,7 @@ private:
 	bool oto_tune_on;
 
 	//current octave
-	uint16_t octave;
+	int octave;
 
 	//frequency coefficients
 	float a_coeff;

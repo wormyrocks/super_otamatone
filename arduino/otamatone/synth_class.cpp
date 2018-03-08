@@ -33,7 +33,7 @@ void Synth::begin()
   change_octave(0);
 }
 
-void Synth::change_octave(uint8_t _oct)
+void Synth::change_octave(int _oct)
 {
   octave += _oct;
   if (octave <= MAX_OCT && octave >= MIN_OCT)
@@ -97,7 +97,7 @@ uint16_t Synth::get_freq()
   return freq;
 }
 
-uint16_t Synth::get_octave()
+int Synth::get_octave()
 {
   return octave;
 }

@@ -252,6 +252,7 @@ void Menu::fs_render(MenuComponentRenderer const& renderer) const
 {
     renderer.fs_menu_render(*this);
 }
+
 \
 // *********************************************************
 // BigNumberComponent
@@ -266,8 +267,10 @@ BigNumberSlider::BigNumberSlider(const char* name,
   _maxValue(maxValue),
   _increment(increment),
   _animation(animation)
+
 {
-    set_select_function(select_fn);
+  set_select_function(select_fn);
+  _slider_divs = 9;//(maxValue - minValue) / increment;
 };
 
 Menu* BigNumberSlider::select()
@@ -312,26 +315,38 @@ void BigNumberSlider::set_max_value(uint8_t value)
 
 bool BigNumberSlider::next(bool loop)
 {
-    if (_value == _maxValue)
+    _value += _increment;
+    if (_value > _maxValue)
     {
         if (loop)
             _value = _minValue;
         else
             _value = _maxValue;
-    }else _value += _increment;
+    }
     return true;
 }
 
 bool BigNumberSlider::prev(bool loop)
 {
-    if (_value == _minValue)
+  _value -= _increment;
+    if (_value < _minValue)
     {
         if (loop)
             _value = _maxValue;
         else
             _value = _minValue;
-    }else _value -= _increment;
+    }
     return true;
+}
+
+uint8_t BigNumberSlider::get_current_component_num() const
+{
+  return _value;
+}
+
+uint8_t BigNumberSlider::get_num_components() const
+{
+    return _slider_divs;
 }
 
 uint8_t BigNumberSlider::get_animation() const{
