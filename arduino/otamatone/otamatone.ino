@@ -18,7 +18,7 @@ Adafruit_SSD1306 oled(4);
 #define PULL 62 // size of pull resistor, in kOhms
 // values pertaining to ADC resolution
 static const uint16_t max_adc = pow(2, ADC_RES) - 1;
-static const uint16_t thresh_adc = max_adc/10;
+static const uint16_t thresh_adc = max_adc / 10;
 static const uint32_t neckscale = max_adc * PULL;
 static const uint16_t neckscale_2 = max_adc / (RMAX - RMIN);
 static uint16_t dt;
@@ -65,6 +65,9 @@ void button_1_released()
       synth1.change_octave(-1);
       disp_update_non_menu();
     }
+  } else {
+    ms.back();
+    ms.display();
   }
 }
 
@@ -108,7 +111,7 @@ void read_scale_neck()
     _pot_val = 0;
   else
   {
-    _pot_val = (neckscale/_pot_val - PULL - RMIN) * neckscale_2;
+    _pot_val = (neckscale / _pot_val - PULL - RMIN) * neckscale_2;
   }
 }
 
@@ -124,6 +127,7 @@ void setup()
   {
     edit_mode = 1;
   }
+  edit_mode = 1;
   oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);
   oled.clearDisplay();
   dac1.analogReference(INTERNAL);
@@ -168,14 +172,12 @@ void loop()
   // if (synth1.playing) Serial.println(synth1.get_freq());
   if (debounce_1.risingEdge())
     button_1_released();
-  else
-    if (debounce_1.fallingEdge())
-      button_1_pressed();
+  else if (debounce_1.fallingEdge())
+    button_1_pressed();
   if (debounce_2.risingEdge())
     button_2_released();
-  else
-    if (debounce_2.fallingEdge())
-      button_2_pressed();
+  else if (debounce_2.fallingEdge())
+    button_2_pressed();
   update_menu();
   while (millis() - dt < EVENT_LOOP_DT)
   {
